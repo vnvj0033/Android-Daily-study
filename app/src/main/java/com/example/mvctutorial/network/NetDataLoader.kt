@@ -77,10 +77,7 @@ object NetDataLoader {
             /****** 상단 작업 완료 ******/
 
         } catch (e: SocketTimeoutException) {
-            val moreData = JSONObject()
-            if (Util.isFilledString(response.result)) {
-                moreData.put("NET_STATUS_RESULT_ERROR_HTTP", response.result)
-            }
+            val moreData = createMoreErrorData(response)
 
             with(response) {
                 status = NetInfo.NET_STATUS_RESULT_ERROR_TIMEOUT
@@ -97,10 +94,7 @@ object NetDataLoader {
                 )
             }
         } catch (e: UnknownHostException) {
-            val moreData = JSONObject()
-            if (Util.isFilledString(response.result)) {
-                moreData.put("NET_STATUS_RESULT_ERROR_HTTP", response.result)
-            }
+            val moreData = createMoreErrorData(response)
 
             response.status = NetInfo.NET_STATUS_RESULT_ERROR_UNKNOWHOST
             response.result = "네트워크 연결 상태를 확인하여 주시기 바랍니다.\n다시 시도 하시겠습니까?"
@@ -115,10 +109,7 @@ object NetDataLoader {
                 moreData.toString()
             )
         } catch (e: IOException) {
-            val moreData = JSONObject()
-            if (Util.isFilledString(response.result)) {
-                moreData.put("NET_STATUS_RESULT_ERROR_HTTP", response.result)
-            }
+            val moreData = createMoreErrorData(response)
 
             response.status = NetInfo.NET_STATUS_RESULT_ERROR_IO
             response.result = "일시적으로 접속에 어려움이 있습니다.\n다시 시도 하시겠습니까?"
@@ -133,11 +124,7 @@ object NetDataLoader {
                 moreData.toString()
             )
         } catch (e: Exception) {
-            val moreData = JSONObject()
-            if (Util.isFilledString(response.result)) {
-                moreData.put("NET_STATUS_RESULT_ERROR_HTTP", response.result)
-            }
-
+            val moreData = createMoreErrorData(response)
             response.status = NetInfo.NET_STATUS_RESULT_ERROR_EXCEPTION
             response.result = "데이터를 읽을 수 없습니다.\n다시 시도 하시겠습니까?"
             response.errorException = e
@@ -161,6 +148,14 @@ object NetDataLoader {
         }
 
         return response
+    }
+
+    private fun createMoreErrorData(response: NetItemResponse): JSONObject {
+        val moreData = JSONObject()
+        if (Util.isFilledString(response.result)) {
+            moreData.put("NET_STATUS_RESULT_ERROR_HTTP", response.result)
+        }
+        return moreData
     }
 
     fun executeImageBitmap(
