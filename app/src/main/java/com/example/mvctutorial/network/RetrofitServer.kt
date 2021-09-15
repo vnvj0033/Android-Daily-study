@@ -12,7 +12,7 @@ object RetrofitServer {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val postAPI = retrofit.create(PostService::class.java)
+    val postAPI: PostService = retrofit.create(PostService::class.java)
 }
 
 interface PostService {

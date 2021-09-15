@@ -14,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        loadPostWithExecute("1")
+        loadPostWithExecute("1")
 
-        loadPostWithEnqueue("2")
+//        loadPostWithEnqueue("2")
     }
 
     private fun loadPostWithEnqueue(id: String) {
