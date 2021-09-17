@@ -1,6 +1,9 @@
 package com.example.mvctutorial.network
 
+import android.util.Log
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -28,3 +31,27 @@ data class Post(
     val title: String,
     val body: String
 )
+
+
+private fun loadPostWithEnqueue(id: String) {
+    val callback = object: Callback<Post> {
+        override fun onResponse(call: Call<Post>, response: Response<Post>) {
+            Log.d("loadPostWithEnqueue","post = ${response.body()}")
+        }
+
+        override fun onFailure(call: Call<Post>, t: Throwable) {
+
+        }
+
+    }
+
+    RetrofitServer.postAPI.getPost(id).enqueue(callback)
+}
+
+fun loadPostWithExecute(id: String) {
+    Thread{
+        val response = RetrofitServer.postAPI.getPost(id).execute()
+
+        Log.d("loadPostWithExecute","post = ${response.body()}")
+    }.start()
+}
