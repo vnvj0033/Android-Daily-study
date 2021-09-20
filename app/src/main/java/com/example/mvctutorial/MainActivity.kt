@@ -21,19 +21,17 @@ class MainActivity : AppCompatActivity() {
 
         val mainView = LayoutInflater.from(this).inflate(R.layout.activity_main, null)
 
+        val layout = ConstraintLayout(this).apply {
+            layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+            addView(mainView)
+        }
+
         val storyBoardView = View(this).apply {
             layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT).apply {
-                bottomToTop = findViewById<TextView>(R.id.cuSectionShortcut).id
+                bottomToTop = mainView.findViewById<TextView>(R.id.cuSectionShortcut).id
             }
         }
-
-        val layout = ConstraintLayout(this).apply {
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            addView(mainView)
-            addView(storyBoardView)
-        }
-
+        layout.addView(storyBoardView)
         setContentView(layout)
     }
 }
-
