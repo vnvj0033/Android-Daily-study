@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().replace(R.id.content_frame, homeFragment).commit()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         homeFragment.view?.findViewById<TextView>(R.id.cuSectionShortcut)?.setOnClickListener {
 
             val fadeInRes = android.R.anim.fade_in
