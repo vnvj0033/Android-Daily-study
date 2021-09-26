@@ -20,6 +20,9 @@ class HomeFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
+
+
+
         view?.findViewById<RecyclerView>(R.id.homeContentView)?.run {
             adapter = HomeContentAdapter(40)
         }

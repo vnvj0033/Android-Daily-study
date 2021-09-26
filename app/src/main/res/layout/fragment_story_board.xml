@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@android:color/holo_orange_light"
         android:layout_width="match_parent"
-        android:layout_height="240dp"/>
+        android:layout_height="340dp"/>
 
     <TextView
         android:id="@+id/contentShortcut"
