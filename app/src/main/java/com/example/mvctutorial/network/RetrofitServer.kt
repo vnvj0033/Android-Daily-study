@@ -1,6 +1,7 @@
 package com.example.mvctutorial.network
 
 import android.util.Log
+import androidx.annotation.Keep
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +26,7 @@ interface PostService {
 
 }
 
+@Keep
 data class Post(
     val userId: Int,
     val id: Int,
