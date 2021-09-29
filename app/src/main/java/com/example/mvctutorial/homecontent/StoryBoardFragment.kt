@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.mvctutorial.R
+import com.example.mvctutorial.databinding.FragmentStoryBoardBinding
 import com.example.mvctutorial.network.Post
 import com.example.mvctutorial.network.RetrofitServer
 import retrofit2.Call
@@ -15,7 +16,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class StoryBoardFragment : Fragment() {
-    private lateinit var banner : ImageView
+    private lateinit var _binding: FragmentStoryBoardBinding
+    val binding get() = _binding
 
     private val networkCallback = object : Callback<Post> {
         override fun onResponse(call: Call<Post>, response: Response<Post>) {
@@ -33,14 +35,13 @@ class StoryBoardFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_story_board, container, false)
+    ): View {
+        _binding = FragmentStoryBoardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        banner = view.findViewById(R.id.cuSectionBanner)
 
         RetrofitServer.postAPI.getPost("1").enqueue(networkCallback)
     }
@@ -50,7 +51,7 @@ class StoryBoardFragment : Fragment() {
 
         val bannerHeight = arguments?.getInt("bannerHeight")
         bannerHeight?.let {
-            banner.layoutParams.height = bannerHeight
+            binding.cuSectionBanner.layoutParams.height = bannerHeight
         }
     }
 }
