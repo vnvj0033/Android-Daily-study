@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import com.example.mvctutorial.R
 import com.example.mvctutorial.databinding.FragmentStoryBoardBinding
 import com.example.mvctutorial.network.Post
 import com.example.mvctutorial.network.RetrofitServer

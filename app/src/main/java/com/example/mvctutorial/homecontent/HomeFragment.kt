@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import com.example.mvctutorial.R
 import com.example.mvctutorial.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
