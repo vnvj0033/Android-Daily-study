@@ -14,7 +14,11 @@ class UiTestActivity : AppCompatActivity() {
         binding = ActivityUiTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.languageTextView.text = "korea"
+        binding.textView.text = "korea"
+
+        binding.button.setOnClickListener {
+            binding.textView.text = "KOR"
+        }
 
     }
 }
