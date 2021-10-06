@@ -1,11 +1,12 @@
 package com.example.mvctutorial.uitest
 
 import android.content.Intent
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
@@ -20,9 +21,16 @@ class UiTestActivityTest{
 
     @get: Rule
     val activityRule: ActivityTestRule<UiTestActivity> = ActivityTestRule(UiTestActivity::class.java, false, false)
+    val activityScenario = ActivityScenario.launch(UiTestActivity::class.java)
+    // intent 사용 방법
+//    val activityScenario = ActivityScenario.launch<UiTestActivity>(
+//        Intent(ApplicationProvider.getApplicationContext(), UiTestActivity::class.java).apply {
+//            putExtra("MyArgs", "Nothing")
+//        }
+//    )
 
     @Test
-    fun noCountryExtra() {
+    fun testWithId() {
         activityRule.launchActivity(Intent())
 
         onView(withId(R.id.text_view))
@@ -33,5 +41,19 @@ class UiTestActivityTest{
 
         onView(withId(R.id.text_view))
             .check(matches(withText("KOR")))
+    }
+
+    @Test
+    fun testWithText() {
+        activityRule.launchActivity(Intent())
+
+        onView(withText("Button"))
+            .perform(click())
+
+
+        onView(withId(R.id.text_view))
+            .check(matches(isDisplayed()))
+            .check(matches(withText("KOR")))
+
     }
 }
