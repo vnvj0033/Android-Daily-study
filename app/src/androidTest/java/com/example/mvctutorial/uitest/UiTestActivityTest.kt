@@ -10,6 +10,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
@@ -22,15 +23,20 @@ import org.junit.runner.RunWith
 class UiTestActivityTest {
 
     @get: Rule
-    val activityRule: ActivityTestRule<UiTestActivity> =
+    private val activityRule: ActivityTestRule<UiTestActivity> =
         ActivityTestRule(UiTestActivity::class.java, false, false)
-    val activityScenario = ActivityScenario.launch(UiTestActivity::class.java)
+    private val activityScenario: ActivityScenario<UiTestActivity> = ActivityScenario.launch(UiTestActivity::class.java)
     // intent 사용 방법
 //    val activityScenario = ActivityScenario.launch<UiTestActivity>(
 //        Intent(ApplicationProvider.getApplicationContext(), UiTestActivity::class.java).apply {
 //            putExtra("MyArgs", "Nothing")
 //        }
 //    )
+    @get:Rule
+    private val activityScenarioRule: ActivityScenarioRule<UiTestActivity> =
+        ActivityScenarioRule( Intent( ApplicationProvider.getApplicationContext(), UiTestActivity::class.java ).apply {
+            putExtra("MyArgs","Nothing")
+        })
 
     @Before
     fun setupData() {
@@ -90,5 +96,4 @@ class UiTestActivityTest {
     fun close() {
         activityScenario.close()
     }
-
 }
