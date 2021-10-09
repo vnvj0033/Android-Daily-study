@@ -1,5 +1,6 @@
 package com.example.mvctutorial.uitest
 
+import android.app.Activity
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
@@ -25,7 +26,9 @@ class UiTestActivityTest {
     @get: Rule
     private val activityRule: ActivityTestRule<UiTestActivity> =
         ActivityTestRule(UiTestActivity::class.java, false, false)
-    private val activityScenario: ActivityScenario<UiTestActivity> = ActivityScenario.launch(UiTestActivity::class.java)
+    private val activityScenario: ActivityScenario<UiTestActivity> =
+        ActivityScenario.launch(UiTestActivity::class.java)
+
     // intent 사용 방법
 //    val activityScenario = ActivityScenario.launch<UiTestActivity>(
 //        Intent(ApplicationProvider.getApplicationContext(), UiTestActivity::class.java).apply {
@@ -34,9 +37,13 @@ class UiTestActivityTest {
 //    )
     @get:Rule
     private val activityScenarioRule: ActivityScenarioRule<UiTestActivity> =
-        ActivityScenarioRule( Intent( ApplicationProvider.getApplicationContext(), UiTestActivity::class.java ).apply {
-            putExtra("MyArgs","Nothing")
-        })
+        ActivityScenarioRule(
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                UiTestActivity::class.java
+            ).apply {
+                putExtra("MyArgs", "Nothing")
+            })
 
     @Before
     fun setupData() {
@@ -44,7 +51,39 @@ class UiTestActivityTest {
         activityRule.runOnUiThread { activityRule.activity.run {} }
 
         activityScenario.onActivity {
-           it.findViewById<TextView>(R.id.text_view)
+            it.findViewById<TextView>(R.id.text_view)?.let { }
+        }
+
+        activityScenarioRule.scenario.onActivity {
+            (it.findViewById<TextView>(R.id.text_view))?.let { }
+        }
+    }
+
+    @Test
+    fun resultTest() {
+        activityScenarioRule.scenario.onActivity {
+            it.setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra("Result", "Ok")
+            })
+            it.finish()
+        }
+        Assert.assertEquals(activityScenarioRule.scenario.result.resultCode, Activity.RESULT_OK)
+        val result = activityScenarioRule.scenario.result.resultData?.extras?.getString("Result")
+        Assert.assertEquals(result, "Ok")
+    }
+
+    @Test
+    fun moveToStateTest() {
+        activityScenarioRule.scenario?.let { activityScenario ->
+            activityScenario.moveToState(Lifecycle.State.STARTED)
+            Assert.assertEquals(activityScenario.state, Lifecycle.State.STARTED)
+            activityScenario.moveToState(Lifecycle.State.CREATED)
+            Assert.assertEquals(activityScenario.state, Lifecycle.State.CREATED)
+            activityScenario.moveToState(Lifecycle.State.RESUMED)
+            Assert.assertEquals(activityScenario.state, Lifecycle.State.RESUMED)
+            activityScenario.moveToState(Lifecycle.State.DESTROYED)
+            Assert.assertEquals(activityScenario.state, Lifecycle.State.DESTROYED)
+            activityScenario.recreate()
         }
     }
 
