@@ -35,6 +35,7 @@ class UiTestActivityTest {
 //            putExtra("MyArgs", "Nothing")
 //        }
 //    )
+
     @get:Rule
     private val activityScenarioRule: ActivityScenarioRule<UiTestActivity> =
         ActivityScenarioRule(

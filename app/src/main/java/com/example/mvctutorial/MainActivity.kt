@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.mvctutorial.databinding.ActivityMainBinding
 import com.example.mvctutorial.homecontent.BannerActivity
+import com.example.mvctutorial.navigate.NavigateActivity
 import com.example.mvctutorial.uitest.UiTestActivity
 
 class MainActivity : AppCompatActivity() {
@@ -26,5 +27,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.navButton.setOnClickListener {
+            val intent = Intent(this, NavigateActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

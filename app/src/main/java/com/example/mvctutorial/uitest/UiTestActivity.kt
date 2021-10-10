@@ -2,6 +2,9 @@ package com.example.mvctutorial.uitest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.mvctutorial.databinding.ActivityUiTestBinding
 
 class UiTestActivity : AppCompatActivity() {
