@@ -2,7 +2,9 @@ package com.example.mvctutorial.di
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.mvctutorial.databinding.ActivityDiBinding
+import com.example.mvctutorial.di.student.DaggerStringComponent
 import com.example.mvctutorial.di.student.Student
 
 class DIActivity : AppCompatActivity() {
@@ -14,9 +16,14 @@ class DIActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val person = Student()
-
-
-
+        DaggerStringComponent.create().injectString(person)
+        Log.d(localClassName, "person.name = ${person.name}")
 
     }
+}
+
+fun main() {
+    val person = Student()
+    DaggerStringComponent.create().injectString(person)
+    print(person.name)
 }

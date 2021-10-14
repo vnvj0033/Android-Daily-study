@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -72,7 +73,7 @@ dependencies {
 
     // dagger2 라이브러
     implementation 'com.google.dagger:dagger:2.39.1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.39.1'
+    kapt 'com.google.dagger:dagger-compiler:2.39.1'
 //    implementation 'com.google.dagger:dagger-android:2.35.1'
 //    implementation 'com.google.dagger:dagger-android-support:2.35.1' // if you use the support libraries
 //    annotationProcessor 'com.google.dagger:dagger-android-processor:2.35.1'
