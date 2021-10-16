@@ -2,7 +2,6 @@ package com.example.mvctutorial.di.ex2provision
 
 
 fun main() {
-    val person = DaggerPersonComponent.create()
-    print(person.getString())
-    print(person.getStudent().name)
+    val personComponent = DaggerPersonComponent.create()
+    val string = personComponent.getString() // Example2 Student
 }

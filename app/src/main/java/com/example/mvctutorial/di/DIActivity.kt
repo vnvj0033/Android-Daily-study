@@ -13,4 +13,3 @@ class DIActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 }
-
