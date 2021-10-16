@@ -1,4 +1,4 @@
-package com.example.mvctutorial.di.student
+package com.example.mvctutorial.di.ex2provision
 
 import javax.inject.Inject
 

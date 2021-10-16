@@ -1,4 +1,4 @@
-package com.example.mvctutorial.di.student
+package com.example.mvctutorial.di.ex1component
 
 import dagger.Module
 import dagger.Provides

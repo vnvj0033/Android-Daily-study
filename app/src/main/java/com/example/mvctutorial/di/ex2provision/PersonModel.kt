@@ -1,4 +1,4 @@
-package com.example.mvctutorial.di.person
+package com.example.mvctutorial.di.ex2provision
 
 import dagger.Module
 import dagger.Provides
