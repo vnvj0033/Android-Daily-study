@@ -9,4 +9,3 @@ fun main() {
     println(student.name)
     println(teacher.name)
 }
-

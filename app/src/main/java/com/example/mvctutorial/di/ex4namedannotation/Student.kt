@@ -8,4 +8,3 @@ class Student {
     @Named("Student")
     lateinit var name: String
 }
-
