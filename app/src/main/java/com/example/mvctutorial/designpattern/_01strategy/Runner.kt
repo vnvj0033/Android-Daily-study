@@ -1,20 +1,15 @@
-package com.example.mvctutorial.designpattern._01strategy
+package com.example.mvctutorial.designpattern._01strategy.ex
+
+import com.example.mvctutorial.designpattern._01strategy.AObj
+import com.example.mvctutorial.designpattern._01strategy.Ainterface
+import com.example.mvctutorial.designpattern._01strategy.AinterfaceImpl
 
 fun main() {
-    val character = GameCharacter()
+    val ainterface : Ainterface =
+        AinterfaceImpl()
 
-    character.run {
-        setWeapon(Knife())
-        attact()
-    }
+    ainterface.funcA()
 
-    character.run {
-        setWeapon(Ax())
-        attact()
-    }
-
-    character.run {
-        setWeapon(Sword())
-        attact()
-    }
+    val aObj = AObj()
+    aObj.funcAA()
 }

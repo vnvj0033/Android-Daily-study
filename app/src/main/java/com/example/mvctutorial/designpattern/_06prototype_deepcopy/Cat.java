@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._06prototype.deepcopy;
+package com.example.mvctutorial.designpattern._06prototype_deepcopy;
 
 import androidx.annotation.NonNull;
 

@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._01strategy;
+package com.example.mvctutorial.designpattern._01strategy_weapon;
 
 
 public class GameCharacter {

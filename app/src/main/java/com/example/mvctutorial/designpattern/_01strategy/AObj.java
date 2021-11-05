@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._01strategy.ex;
+package com.example.mvctutorial.designpattern._01strategy;
 
 public class AObj {
 
