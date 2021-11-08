@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._01strategy.ex
+package com.example.mvctutorial.designpattern._01strategy
 
 import com.example.mvctutorial.designpattern._01strategy.AObj
 import com.example.mvctutorial.designpattern._01strategy.Ainterface

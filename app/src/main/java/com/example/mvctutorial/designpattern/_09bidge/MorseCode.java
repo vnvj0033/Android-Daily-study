@@ -8,14 +8,6 @@ public class MorseCode {
         this.function = function;
     }
 
-    public MorseCodeFunction getFunction() {
-        return function;
-    }
-
-    public void setFunction(MorseCodeFunction function) {
-        this.function = function;
-    }
-
     void dot(){
         function.dot();
     }

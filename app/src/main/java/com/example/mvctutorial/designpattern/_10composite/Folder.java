@@ -14,10 +14,6 @@ public class Folder extends Component {
         return child.add(component);
     }
 
-    Boolean removeComponent(Component component){
-        return child.remove(component);
-    }
-
     public List<Component> getChildren() {
         return child;
     }

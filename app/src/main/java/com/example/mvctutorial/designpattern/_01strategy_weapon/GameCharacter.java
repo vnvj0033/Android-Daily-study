@@ -7,9 +7,9 @@ public class GameCharacter {
 
     private Weapon weapon;
 
-    public int attact() {
+    public int attack() {
 
-        return weapon.doAttact();
+        return weapon.doAttack();
     }
 
     public void setWeapon(Weapon weapon) {

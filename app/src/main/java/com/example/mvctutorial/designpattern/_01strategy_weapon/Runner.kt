@@ -1,21 +1,20 @@
 package com.example.mvctutorial.designpattern._01strategy_weapon
 
 fun main() {
-    val character =
-        GameCharacter()
+    val character = GameCharacter()
 
     character.run {
         setWeapon(Knife())
-        attact()
+        attack()
     }
 
     character.run {
         setWeapon(Ax())
-        attact()
+        attack()
     }
 
     character.run {
         setWeapon(Sword())
-        attact()
+        attack()
     }
 }

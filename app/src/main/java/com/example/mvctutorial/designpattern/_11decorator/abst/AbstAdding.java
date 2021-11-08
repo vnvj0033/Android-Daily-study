@@ -12,8 +12,4 @@ public class AbstAdding implements IBeverage{
     public int getTotalPrice() {
         return base.getTotalPrice();
     }
-
-    protected IBeverage getBase() {
-        return base;
-    }
 }

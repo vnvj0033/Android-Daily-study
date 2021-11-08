@@ -10,8 +10,8 @@ fun main() {
     val factory = FactoryInstance.getFactory()
 
 
-    val button: Button = factory.createButton()
-    val textArea : TextArea = factory.createTextArea()
+    val button = factory.createButton()
+    val textArea = factory.createTextArea()
 
     button.onClick()
     println(textArea.text)

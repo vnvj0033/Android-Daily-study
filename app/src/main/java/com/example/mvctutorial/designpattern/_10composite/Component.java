@@ -1,6 +1,6 @@
 package com.example.mvctutorial.designpattern._10composite;
 
-abstract public class Component {
+public class Component {
     private String name;
 
     public Component(String name) {

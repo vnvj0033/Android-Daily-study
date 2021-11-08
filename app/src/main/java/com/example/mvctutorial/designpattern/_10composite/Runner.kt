@@ -28,16 +28,16 @@ fun main() {
     root.addComponent(usr)
         usr.addComponent(java)
 
-    show(root)
+    show(root, 0)
 
 
 }
 
-private fun show(component: Component) {
-    println(component.javaClass.name + "|" + component.name)
+private fun show(component: Component, i: Int) {
+    println(i.toString() + " : " + component.javaClass.simpleName + "|" + component.name)
     if (component is Folder) {
         for (c in component.children) {
-            show(c)
+            show(c, i+1)
         }
     }
 }
