@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._13chain_of_resposibility;
+package com.example.mvctutorial.designpattern._13chain_of_resposibility.part1;
 
 public abstract class Calculator {
     Calculator nextCalculator;
