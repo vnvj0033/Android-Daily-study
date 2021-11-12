@@ -11,4 +11,16 @@ fun main() {
     armor1.defense(attack)
 
     println(attack.amount)
+
+    val defense = Defense {attack ->
+        attack.amount -= 50
+    }
+
+    armor2.setNextDefense(defense)
+
+    attack.amount = 100
+    armor1.defense(attack)
+
+    println(attack.amount)
+
 }
