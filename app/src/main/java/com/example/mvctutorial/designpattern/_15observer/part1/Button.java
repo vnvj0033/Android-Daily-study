@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._15observer;
+package com.example.mvctutorial.designpattern._15observer.part1;
 
 public class Button {
 
