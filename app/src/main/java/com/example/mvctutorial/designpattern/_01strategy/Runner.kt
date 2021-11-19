@@ -1,15 +1,9 @@
 package com.example.mvctutorial.designpattern._01strategy
 
-import com.example.mvctutorial.designpattern._01strategy.AObj
-import com.example.mvctutorial.designpattern._01strategy.Ainterface
-import com.example.mvctutorial.designpattern._01strategy.AinterfaceImpl
-
 fun main() {
-    val ainterface : Ainterface =
-        AinterfaceImpl()
-
+    val ainterface : AInterface = AInterfaceImpl()
     ainterface.funcA()
 
-    val aObj = AObj()
+    val aObj = AObj(AInterfaceImpl())
     aObj.funcAA()
 }
