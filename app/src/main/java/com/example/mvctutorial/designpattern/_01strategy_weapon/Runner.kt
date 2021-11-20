@@ -4,17 +4,17 @@ fun main() {
     val character = GameCharacter()
 
     character.run {
-        setWeapon(Knife())
+        weapon = Ax()
         attack()
     }
 
     character.run {
-        setWeapon(Ax())
+        weapon = Knife()
         attack()
     }
 
     character.run {
-        setWeapon(Sword())
+        weapon = Sword()
         attack()
     }
 }
