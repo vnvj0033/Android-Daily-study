@@ -1,14 +1,14 @@
 package com.example.mvctutorial.designpattern._05singleton
 
 fun main() {
-    val ssc = SoundSystemComponent.getInstance()
+    val ssc = SoundSystemComponent
 
-    ssc.volume = 5
+    SoundSystemComponent.volume = 5
     println(ssc.volume)
 
-    ssc.volume = 10
+    SoundSystemComponent.volume = 10
 
-    val ssc2 = SoundSystemComponent.getInstance()
+    val ssc2 = SoundSystemComponent
     println(ssc2.volume)
 
     println(ssc == ssc2)
