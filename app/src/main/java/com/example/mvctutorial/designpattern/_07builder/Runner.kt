@@ -3,7 +3,7 @@ package com.example.mvctutorial.designpattern._07builder
 fun main() {
 
     val factory = ComputerFactory()
-    factory.setBuleprint(Mac())
+    factory.print = Mac()
     val com = factory.makeComputer()
 
     val computer = ComputerBuilder
