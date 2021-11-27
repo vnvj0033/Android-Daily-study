@@ -1,7 +1,6 @@
 package com.example.mvctutorial.designpattern._08abstractfactory
 
 import com.example.mvctutorial.designpattern._08abstractfactory.gt.GtFactory
-import com.example.mvctutorial.designpattern._08abstractfactory.samchuly.SamFactory
 
 fun main() {
 
@@ -11,8 +10,6 @@ fun main() {
 
     val body = factory.createBody()
     val wheel = factory.createWheel()
-
-
 
     println("${body.javaClass}")
     println("${wheel.javaClass}")
