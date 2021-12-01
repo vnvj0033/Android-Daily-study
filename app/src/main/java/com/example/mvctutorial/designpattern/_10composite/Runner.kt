@@ -1,19 +1,35 @@
 package com.example.mvctutorial.designpattern._10composite
 
-fun main() {
-    val root = Folder("root")
-    val home = Folder("home")
-    val garam = Folder("garam")
-    val music = Folder("music")
-    val picture = Folder("picture")
-    val doc = Folder("doc")
-    val usr = Folder("usr")
+import com.example.mvctutorial.designpattern._10composite.java.Component
+import com.example.mvctutorial.designpattern._10composite.java.File
+import com.example.mvctutorial.designpattern._10composite.java.Folder
 
-    val track1 = File("track1")
-    val track2 = File("track2")
-    val pic1 = File("pic1")
-    val doc1 = File("doc1")
-    val java = File("java")
+fun main() {
+    val root =
+        Folder("root")
+    val home =
+        Folder("home")
+    val garam =
+        Folder("garam")
+    val music =
+        Folder("music")
+    val picture =
+        Folder("picture")
+    val doc =
+        Folder("doc")
+    val usr =
+        Folder("usr")
+
+    val track1 =
+        File("track1")
+    val track2 =
+        File("track2")
+    val pic1 =
+        File("pic1")
+    val doc1 =
+        File("doc1")
+    val java =
+        File("java")
 
     root.addComponent(home)
         home.addComponent(garam)

@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._10composite;
+package com.example.mvctutorial.designpattern._10composite.java;
 
 public class Component {
     private String name;

@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._10composite;
+package com.example.mvctutorial.designpattern._10composite.java;
 
 import java.util.ArrayList;
 import java.util.List;
