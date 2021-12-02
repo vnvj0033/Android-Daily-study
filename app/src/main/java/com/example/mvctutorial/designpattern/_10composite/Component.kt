@@ -1,4 +1,8 @@
 package com.example.mvctutorial.designpattern._10composite
 
-class Component {
+open class Component(val name: String) {
+
+    fun displayName() {
+        println(name)
+    }
 }
