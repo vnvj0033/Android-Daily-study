@@ -1,11 +1,11 @@
 package com.example.mvctutorial.designpattern._11decorator
 
-import com.example.mvctutorial.designpattern._11decorator.concrete.Milk
+import com.example.mvctutorial.designpattern._11decorator.java.concrete.Milk
 
-import com.example.mvctutorial.designpattern._11decorator.concrete.Base
+import com.example.mvctutorial.designpattern._11decorator.java.concrete.Base
 
-import com.example.mvctutorial.designpattern._11decorator.abst.IBeverage
-import com.example.mvctutorial.designpattern._11decorator.concrete.Espresso
+import com.example.mvctutorial.designpattern._11decorator.java.abst.IBeverage
+import com.example.mvctutorial.designpattern._11decorator.java.concrete.Espresso
 import java.util.*
 
 fun main() {

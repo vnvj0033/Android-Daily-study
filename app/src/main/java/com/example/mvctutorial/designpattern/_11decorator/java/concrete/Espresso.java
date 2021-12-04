@@ -1,7 +1,7 @@
-package com.example.mvctutorial.designpattern._11decorator.concrete;
+package com.example.mvctutorial.designpattern._11decorator.java.concrete;
 
-import com.example.mvctutorial.designpattern._11decorator.abst.AbstAdding;
-import com.example.mvctutorial.designpattern._11decorator.abst.IBeverage;
+import com.example.mvctutorial.designpattern._11decorator.java.abst.AbstAdding;
+import com.example.mvctutorial.designpattern._11decorator.java.abst.IBeverage;
 
 public class Espresso extends AbstAdding {
 

@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._11decorator.abst;
+package com.example.mvctutorial.designpattern._11decorator.java.abst;
 
 public class AbstAdding implements IBeverage{
 
