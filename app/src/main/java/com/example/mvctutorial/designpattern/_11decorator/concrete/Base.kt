@@ -1,4 +1,7 @@
 package com.example.mvctutorial.designpattern._11decorator.concrete
 
-class Base {
+import com.example.mvctutorial.designpattern._11decorator.abst.IBeverage
+
+class Base: IBeverage {
+    override fun getTotalPrice() = 0
 }
