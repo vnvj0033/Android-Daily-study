@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._12visitor;
+package com.example.mvctutorial.designpattern._12visitor.java;
 
 public class VisitorA implements Visitor {
     private int number;

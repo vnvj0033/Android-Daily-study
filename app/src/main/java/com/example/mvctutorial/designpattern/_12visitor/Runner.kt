@@ -1,5 +1,9 @@
 package com.example.mvctutorial.designpattern._12visitor
 
+import com.example.mvctutorial.designpattern._12visitor.java.Visitable
+import com.example.mvctutorial.designpattern._12visitor.java.VisitableA
+import com.example.mvctutorial.designpattern._12visitor.java.VisitorA
+
 fun main() {
     val visitables = ArrayList<Visitable>().apply {
         add(VisitableA(1))
@@ -9,7 +13,8 @@ fun main() {
         add(VisitableA(5))
     }
 
-    val visitor = VisitorA()
+    val visitor =
+        VisitorA()
 
     for (va in visitables) {
         va.accept(visitor)
