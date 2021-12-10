@@ -4,7 +4,7 @@ fun main() {
     val plus = PlusCalculator()
     val sub = SubCalculator()
 
-    plus.setNextCalculator(sub)
+    plus.nextCalculator = sub
 
     val request1 = Request(1, 2, "+")
     val request2 = Request(10, 8, "-")
