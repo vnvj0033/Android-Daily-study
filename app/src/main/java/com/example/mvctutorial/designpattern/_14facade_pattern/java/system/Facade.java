@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._14facade_pattern.system;
+package com.example.mvctutorial.designpattern._14facade_pattern.java.system;
 public class Facade {
     private HelpSystem01 system01;
     private HelpSystem02 system02;

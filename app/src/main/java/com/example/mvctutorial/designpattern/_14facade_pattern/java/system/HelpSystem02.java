@@ -1,8 +1,8 @@
-package com.example.mvctutorial.designpattern._14facade_pattern.system;
+package com.example.mvctutorial.designpattern._14facade_pattern.java.system;
 
-public class HelpSystem01 {
+public class HelpSystem02 {
 
-    public HelpSystem01() {
+    public HelpSystem02() {
         System.out.println("call constructor : " + getClass().getSimpleName());
     }
 
