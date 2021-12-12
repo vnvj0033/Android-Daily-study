@@ -1,11 +1,13 @@
 package com.example.mvctutorial.designpattern._15observer.part1
 
-import com.example.mvctutorial.designpattern._15observer.part1.Button
 
 fun main() {
     val button = Button()
-    button.setOnClickListener {
-        println("is clicked")
+    button.onClickListener = object : Button.OnClickListener {
+        override fun onClick(button: Button) {
+            println("button click")
+        }
+
     }
     button.onClick()
 }
