@@ -6,6 +6,10 @@ fun main() {
         println("$o is called")
     }
 
+    button.addObserver { o, arg ->
+        println("$o is called2")
+    }
+
     button.onClick()
     button.onClick()
     button.onClick()
