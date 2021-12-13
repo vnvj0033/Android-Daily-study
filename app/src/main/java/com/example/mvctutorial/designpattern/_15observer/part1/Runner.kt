@@ -7,7 +7,6 @@ fun main() {
         override fun onClick(button: Button) {
             println("button click")
         }
-
     }
     button.onClick()
 }

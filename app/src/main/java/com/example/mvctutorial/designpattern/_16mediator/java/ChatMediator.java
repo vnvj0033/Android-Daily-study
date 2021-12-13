@@ -1,7 +1,7 @@
-package com.example.mvctutorial.designpattern._16mediator;
+package com.example.mvctutorial.designpattern._16mediator.java;
 
-import com.example.mvctutorial.designpattern._16mediator.content.Colleague;
-import com.example.mvctutorial.designpattern._16mediator.content.Mediator;
+import com.example.mvctutorial.designpattern._16mediator.java.content.Colleague;
+import com.example.mvctutorial.designpattern._16mediator.java.content.Mediator;
 
 class ChatMediator extends Mediator {
 

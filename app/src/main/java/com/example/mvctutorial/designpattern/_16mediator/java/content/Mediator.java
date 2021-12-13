@@ -1,4 +1,4 @@
-package com.example.mvctutorial.designpattern._16mediator.content;
+package com.example.mvctutorial.designpattern._16mediator.java.content;
 
 import java.util.ArrayList;
 import java.util.List;
