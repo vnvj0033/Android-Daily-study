@@ -1,4 +1,10 @@
 package com.example.mvctutorial.designpattern._16mediator
 
-class ChatColleague {
+import com.example.mvctutorial.designpattern._16mediator.content.Colleague
+
+class ChatColleague: Colleague() {
+
+    override fun handle(data: String) {
+        println("$this-$data")
+    }
 }

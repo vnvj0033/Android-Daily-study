@@ -1,18 +1,11 @@
 package com.example.mvctutorial.designpattern._16mediator
 
-import com.example.mvctutorial.designpattern._16mediator.java.ChatColleague
-import com.example.mvctutorial.designpattern._16mediator.java.ChatMediator
-
 fun main() {
-    val mediator =
-        ChatMediator()
+    val mediator = ChatMediator()
 
-    val colleague1 =
-        ChatColleague()
-    val colleague2 =
-        ChatColleague()
-    val colleague3 =
-        ChatColleague()
+    val colleague1 = ChatColleague()
+    val colleague2 = ChatColleague()
+    val colleague3 = ChatColleague()
 
     colleague1.join(mediator)
     colleague2.join(mediator)
