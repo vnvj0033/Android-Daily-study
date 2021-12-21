@@ -4,25 +4,14 @@ import java.util.*
 
 fun main() {
 
-    val list = LinkedList<Command>()
+    val queue = PriorityQueue<Command>()
 
-    list.add(object :Command {
-        override fun execute() {
-            println("작업 1")
-        }
-    })
-    list.add(object :Command {
-        override fun execute() {
-            println("작업 2")
-        }
-    })
-    list.add(object :Command {
-        override fun execute() {
-            println("작업 3")
-        }
-    })
+    queue.add(StringCommandPrint("ABCD"))
+    queue.add(StringCommandPrint("ABC"))
+    queue.add(StringCommandPrint("AB"))
+    queue.add(StringCommandPrint("A"))
 
-    for (command in list){
+    for (command in queue) {
         command.execute()
     }
 }

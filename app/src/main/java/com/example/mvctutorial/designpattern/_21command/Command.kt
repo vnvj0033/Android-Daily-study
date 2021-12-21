@@ -1,6 +1,6 @@
 package com.example.mvctutorial.designpattern._21command
 
-interface Command {
+interface Command : Comparable<Command>{
 
     fun execute()
 }
