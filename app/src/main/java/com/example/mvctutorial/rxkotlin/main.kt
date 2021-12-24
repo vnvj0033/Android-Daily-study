@@ -5,10 +5,23 @@ import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 
 fun main() {
-    observerBase()
-
+//    observerBase()
+    fromMethod()
 }
 
+fun fromMethod() {
+    val list = listOf(1, 2, 3)
+    val listObserver = Observable.fromIterable(list)
+
+    val observer = object : Observer<Int> {
+        override fun onSubscribe(d: Disposable) = println("onSubscribe - $d")
+        override fun onNext(t: Int) = println("onNext - $t")
+        override fun onError(e: Throwable) = println("inError - $e")
+        override fun onComplete() = println("onComplete - ")
+    }
+
+    listObserver.subscribe(observer)
+}
 
 fun observerBase() {
 
