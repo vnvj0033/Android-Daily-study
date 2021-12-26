@@ -6,6 +6,9 @@ import io.reactivex.rxjava3.disposables.Disposable
 
 fun main() {
 
+    // Observable 기본 생성은 Observable.create<T>
+    // 그 후에 Observer 객체를 subscribe 한다.
+
     val observable1 = Observable.create<Int> {
         it.onNext(1)
         it.onNext(2)
