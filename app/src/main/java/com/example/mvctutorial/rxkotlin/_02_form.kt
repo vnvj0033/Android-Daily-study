@@ -10,12 +10,12 @@ import java.util.concurrent.TimeUnit
 fun main() {
     val list = listOf(1, 2, 3)
 
-    // fromIterable 는 리스트를 Observable객체로 만들어준다.
+    // fromIterable 는 리스트의 아이템을 Observable객체로 만들어준다.
     val listOb = Observable.fromIterable(list)
 
     // Callable은 Runnable과 비슷하지만 리턴 값이 있음
     val call = Callable { 4 }
-    // fromCallable는 Callable를 Observable로 만들어준다.
+    // fromCallable는 Callable의 return값을 Observable로 만들어준다.
     val callOb = Observable.fromCallable(call)
 
     // Future는 비동기 작업의 결과를 가저오는 객체 여튼 그렇다고함...
@@ -27,7 +27,7 @@ fun main() {
         override fun isCancelled() = false
     }
 
-    // fromFuture은 Future을 Observable로 만들어줌
+    // fromFuture은 Future의 get()값을 Observable로 만들어줌
     val futureOb = Observable.fromFuture(future)
 
     val observer: Observer<Int> = object : Observer<Int> {
