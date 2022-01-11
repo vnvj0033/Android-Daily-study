@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.subjects.ReplaySubject
 /** Observable없이 subject만으로 Observable역할 수행 */
 fun main() {
     val observer = object : Observer<String> {
-        override fun onComplete() {}
+        override fun onComplete() = println("onComplete()")
         override fun onNext(item: String) = println("onNext() - $item")
         override fun onError(e: Throwable) {}
         override fun onSubscribe(d: Disposable) {}
