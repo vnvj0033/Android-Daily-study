@@ -48,7 +48,6 @@ interface PostService {
 
 }
 
-@Keep
 data class Post(
     val userId: Int,
     val id: Int,
