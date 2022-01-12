@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MVCTutorial">
         <activity
+            android:name=".network.RetrofitActivity"
+            android:exported="false" />
+        <activity
             android:name=".di.DIActivity"
             android:exported="true" />
         <activity
