@@ -16,12 +16,12 @@ fun main() = runBlocking {
         println("Mapping item $it - ${Thread.currentThread().name}")
         it
     }.observeOn(Schedulers.computation())
-        .subscribe(MySubscriber())
+        .subscribe(MySubscriber16())
     delay(5000)
 
 }
 
-class MySubscriber : Subscriber<Int> {
+class MySubscriber16 : Subscriber<Int> {
     override fun onSubscribe(s: Subscription) {
 
         // request를 조절하여 전달 받는 수를 조정 OnComplete 호출 X
