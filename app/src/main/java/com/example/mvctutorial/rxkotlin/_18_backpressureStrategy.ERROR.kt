@@ -10,7 +10,10 @@ import kotlinx.coroutines.runBlocking
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 
-/** BackpressureStrategy.ERROR는 소비쪽에서 생산을 따라잡을 수 없는경우 error를 발생시킵니다. */
+/**
+ *  BackpressureStrategy.ERROR는 소비쪽에서 생산을 따라잡을 수 없는경우 error를 발생시킵니다.
+ *  단 기본 버퍼 128개는 사용함
+ * */
 fun main() = runBlocking {
     val flowable = Flowable.create<Int>({
         for (i in 1..200) {
@@ -27,13 +30,11 @@ fun main() = runBlocking {
     }
 
     flowable.observeOn(Schedulers.computation()).subscribe(MySubscriber18(waitingJob))
-
     delay(1000)
 }
 
 class MySubscriber18(private val job: Job) : Subscriber<Int> {
     override fun onSubscribe(s: Subscription) {
-
         // 제한 200개
         s.request(200)
     }
