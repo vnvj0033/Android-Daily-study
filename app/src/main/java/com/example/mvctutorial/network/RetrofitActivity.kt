@@ -30,5 +30,8 @@ class RetrofitActivity : AppCompatActivity() {
             }
 
         })
+
+        loadPostWithEnqueue("2")
+        loadPostWithExecute("3")
     }
 }

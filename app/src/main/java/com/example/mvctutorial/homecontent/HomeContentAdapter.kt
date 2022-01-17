@@ -15,7 +15,9 @@ class HomeContentAdapter(private val size: Int) : RecyclerView.Adapter<HomeConte
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.textView.text = "item: $position"
+        val positionText = "item: $position"
+
+        viewHolder.textView.text = positionText
     }
 
     override fun getItemCount() = size

@@ -15,7 +15,7 @@ import retrofit2.Response
 
 class StoryBoardFragment : Fragment() {
     private lateinit var _binding: FragmentStoryBoardBinding
-    val binding get() = _binding
+    private val binding get() = _binding
 
     private val networkCallback = object : Callback<Post> {
         override fun onResponse(call: Call<Post>, response: Response<Post>) {
@@ -25,7 +25,7 @@ class StoryBoardFragment : Fragment() {
         }
 
         override fun onFailure(call: Call<Post>, t: Throwable) {
-            TODO("Not yet implemented")
+            t.printStackTrace()
         }
 
     }
