@@ -11,7 +11,7 @@ import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 
 /**
- *  BackpressureStrategy.ERROR는 소비쪽에서 생산을 따라잡을 수 없는경우 error를 발생시킵니다.
+ *  BackpressureStrategy.ERROR는 소비쪽에서 생산을 따라잡을 수 없는경우 error를 발생.
  *  단 기본 버퍼 128개는 사용함
  * */
 fun main() = runBlocking {

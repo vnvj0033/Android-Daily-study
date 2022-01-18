@@ -11,8 +11,8 @@ import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 
 /**
- *  BackpressureStrategy.DROP은 수신자가 처리중에 생산자로 부터 전달을 받으면 해당 데이터는 버립니다.
- *  단 기본 버퍼 128개는 사용하여 128개 수신까지는 저장되어 처리함니다.
+ *  BackpressureStrategy.DROP은 수신자가 처리중에 생산자로 부터 전달을 받으면 해당 데이터는 버림.
+ *  단 기본 버퍼 128개는 사용하여 128개 수신까지는 저장되어 처리.
  * */
 fun main() = runBlocking {
     val flowable = Flowable.create<Int>({
