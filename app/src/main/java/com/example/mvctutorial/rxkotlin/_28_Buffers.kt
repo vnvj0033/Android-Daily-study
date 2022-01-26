@@ -1,5 +1,6 @@
 package com.example.mvctutorial.rxkotlin
 
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit
  * */
 
 fun main() = runBlocking {
+    // time interval
     val observable = Observable.interval(100, TimeUnit.MILLISECONDS) // 100ms 마다 데이터를 발생
     val intervalTime = Observable.interval(200, TimeUnit.MILLISECONDS) // 전달은 200ms 마다 collection으로 전달
 
@@ -20,4 +22,14 @@ fun main() = runBlocking {
         .subscribe { println("Time: ${System.currentTimeMillis() - time} : $it") }
 
     delay(1000)
+
+
+    // 하단은 일반 buffers
+    val flowable = Flowable.range(1, 111)
+    flowable.buffer(10)
+        .subscribe {
+            println(it)
+        }
+
+    Unit
 }
