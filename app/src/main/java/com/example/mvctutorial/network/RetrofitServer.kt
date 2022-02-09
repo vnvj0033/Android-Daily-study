@@ -1,6 +1,7 @@
 package com.example.mvctutorial.network
 
 import android.util.Log
+import androidx.annotation.Keep
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -41,12 +42,11 @@ object RetrofitServer {
 }
 
 interface PostService {
-
     @GET("posts/{id}")
     fun getPost(@Path("id") id: String): Call<Post>
-
 }
 
+@Keep
 data class Post(
     val userId: Int,
     val id: Int,
@@ -60,10 +60,7 @@ fun loadPostWithEnqueue(id: String) {
             Log.d("loadPostWithEnqueue","post = ${response.body()}")
         }
 
-        override fun onFailure(call: Call<Post>, t: Throwable) {
-
-        }
-
+        override fun onFailure(call: Call<Post>, t: Throwable) { }
     }
 
     RetrofitServer.postAPI.getPost(id).enqueue(callback)
