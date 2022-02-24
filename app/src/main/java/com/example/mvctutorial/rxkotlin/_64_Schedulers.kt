@@ -28,6 +28,11 @@ import java.util.concurrent.Executors
  * */
 
 fun main() = runBlocking<Unit> {
+    schedulers()
+}
+
+suspend fun schedulers() {
+
     val ob = Observable.just(1)
 
     ob.subscribeOn(Schedulers.io())
