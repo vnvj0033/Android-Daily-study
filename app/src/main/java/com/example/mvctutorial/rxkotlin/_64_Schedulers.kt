@@ -28,7 +28,9 @@ import java.util.concurrent.Executors
  * */
 
 fun main() = runBlocking<Unit> {
-    schedulers()
+//    schedulers()
+    schedulersIO()
+    schedulersCOMPUTATION()
 }
 
 suspend fun schedulers() {
@@ -57,4 +59,28 @@ suspend fun schedulers() {
 
     delay(1000)
 
+}
+
+suspend fun schedulersIO() {
+    println("start Schedulers.io()")
+    val ob = Observable.just(1,2,3)
+
+    ob.subscribeOn(Schedulers.io())
+        .subscribe {
+            runBlocking { delay(100) }
+            println("$it: Schedulers.io() - ${Thread.currentThread().name}")
+        }
+    delay(500)
+}
+
+suspend fun schedulersCOMPUTATION() {
+    println("start Schedulers.computation()")
+    val ob = Observable.just(1,2,3)
+
+    ob.subscribeOn(Schedulers.computation())
+        .subscribe {
+            runBlocking { delay(100) }
+            println("$it: Schedulers.computation() - ${Thread.currentThread().name}")
+        }
+    delay(500)
 }
