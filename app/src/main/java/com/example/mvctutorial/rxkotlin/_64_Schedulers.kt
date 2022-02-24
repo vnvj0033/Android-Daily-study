@@ -29,8 +29,7 @@ import java.util.concurrent.Executors
 
 fun main() = runBlocking<Unit> {
 //    schedulers()
-    schedulersIO()
-    schedulersCOMPUTATION()
+    schedulersIoAndComputation()
 }
 
 suspend fun schedulers() {
@@ -61,7 +60,11 @@ suspend fun schedulers() {
 
 }
 
-suspend fun schedulersIO() {
+suspend fun schedulersIoAndComputation() {
+    /**
+     * Schedulers.io 와 Schedulers.computation은 비동기로 실행을 확인 가능
+     * */
+
     println("start Schedulers.io()")
     val ob = Observable.just(1,2,3)
 
@@ -70,17 +73,15 @@ suspend fun schedulersIO() {
             runBlocking { delay(100) }
             println("$it: Schedulers.io() - ${Thread.currentThread().name}")
         }
-    delay(500)
-}
 
-suspend fun schedulersCOMPUTATION() {
     println("start Schedulers.computation()")
-    val ob = Observable.just(1,2,3)
 
     ob.subscribeOn(Schedulers.computation())
         .subscribe {
             runBlocking { delay(100) }
             println("$it: Schedulers.computation() - ${Thread.currentThread().name}")
         }
+
     delay(500)
 }
+
