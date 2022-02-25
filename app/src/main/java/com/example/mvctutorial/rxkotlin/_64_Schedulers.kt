@@ -1,7 +1,6 @@
 package com.example.mvctutorial.rxkotlin
 
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -29,7 +28,8 @@ import java.util.concurrent.Executors
 
 fun main() = runBlocking<Unit> {
 //    schedulers()
-    schedulersIoAndComputation()
+//    schedulersIoAndComputation()
+    schedulersTrampoline()
 }
 
 suspend fun schedulers() {
@@ -54,7 +54,8 @@ suspend fun schedulers() {
     val executor = Executors.newFixedThreadPool(2)
     val customScheduler = Schedulers.from(executor)
 
-    ob.subscribeOn(customScheduler) .subscribe { println("Schedulers.from() - ${Thread.currentThread().name}") }
+    ob.subscribeOn(customScheduler)
+        .subscribe { println("Schedulers.from() - ${Thread.currentThread().name}") }
 
     delay(1000)
 
@@ -66,7 +67,7 @@ suspend fun schedulersIoAndComputation() {
      * */
 
     println("start Schedulers.io()")
-    val ob = Observable.just(1,2,3)
+    val ob = Observable.just(1, 2, 3)
 
     ob.subscribeOn(Schedulers.io())
         .subscribe {
@@ -85,3 +86,32 @@ suspend fun schedulersIoAndComputation() {
     delay(500)
 }
 
+
+suspend fun schedulersTrampoline() {
+    /**
+     * Schedulers.trampoline()으로 main thread에서 작업하여 동기성을 유지한다.
+     * */
+    
+    println("start - Observable#1")
+    
+    val ob = Observable.just(1, 2, 3)
+
+    ob.subscribeOn(Schedulers.trampoline())
+        .subscribe {
+            runBlocking { delay(100) }
+            println("$it: Observable#1 - ${Thread.currentThread().name}")
+        }
+
+    println("start - Observable#2")
+
+    ob.subscribeOn(Schedulers.trampoline())
+        .subscribe {
+            runBlocking { delay(100) }
+            println("$it: Observable#2 - ${Thread.currentThread().name}")
+        }
+
+    println("done")
+
+    delay (1000)
+
+}
