@@ -7,7 +7,6 @@ import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 
 /**
- * subscribeOn은 subscribe의 Observer 실행 쓰레드를 변경한다.
  * Scheduler.io() : 파일 / network IO 작업을 할때 사용하는 용도입니다.
  * 내부적으로 cachedPool을 사용하기 때문에 thread가 동시에 계속 늘어나면서 생성될수 있으며, 유휴 thread가 있을 경우 재활용됩니다.
  *
