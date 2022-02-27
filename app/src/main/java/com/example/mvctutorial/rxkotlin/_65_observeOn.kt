@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 
 /**
- * observeOn은 context를 switching 한다.
+ * observeOn은 Observable의 context(대표적으로 실행 쓰레드)를 switching 한다.
  * */
 
 fun main() = runBlocking<Unit> {
