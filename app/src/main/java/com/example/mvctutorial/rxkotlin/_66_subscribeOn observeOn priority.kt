@@ -11,7 +11,8 @@ import kotlinx.coroutines.runBlocking
  * */
 
 fun main() = runBlocking<Unit> {
-    MixedSubscribeOnAndObserveOn()
+//    MixedSubscribeOnAndObserveOn()
+    observeOnUnderSubscriptOn()
 }
 
 
@@ -29,6 +30,28 @@ private suspend fun MixedSubscribeOnAndObserveOn() {
             it
         }
         .observeOn(Schedulers.single())
+        .subscribe { println("subscribed: $it - ${Thread.currentThread().name}") }
+
+    delay(100)
+
+    println("end!")
+}
+
+/**
+ * subscribeOn이 두번 쓰였지만 먼저 선언된 Schedulers.io()가 동작함 (따라서 Thread는 cached Thread)
+ * observeOn 아래에 subscribeOn이 선언되었지만 subscribe 블럭내 동작은 observeOn의 영향을 받습니다.
+ * */
+private suspend fun observeOnUnderSubscriptOn() {
+    println("start!")
+
+    val ob = Observable.just(1)
+
+    ob.subscribeOn(Schedulers.io())
+        .map {
+            println("processing in ${Thread.currentThread().name}")
+            it
+        }.observeOn(Schedulers.single())
+        .subscribeOn(Schedulers.computation())
         .subscribe { println("subscribed: $it - ${Thread.currentThread().name}") }
 
     delay(100)
