@@ -13,7 +13,8 @@ import kotlinx.coroutines.runBlocking
 fun main() = runBlocking<Unit> {
 //    MixedSubscribeOnAndObserveOn()
 //    observeOnUnderSubscriptOn()
-    subscribeOnMultipleTimes()
+//    subscribeOnMultipleTimes()
+    isTheSubscribeOnLocationImportant()
 }
 
 
@@ -79,4 +80,22 @@ private suspend fun subscribeOnMultipleTimes() {
     delay(100)
 
     println("end!")
+}
+
+private suspend fun isTheSubscribeOnLocationImportant() {
+    println("start!")
+
+    val ob = Observable.just(1)
+
+    ob.map {
+        println("processing in ${Thread.currentThread().name}")
+        it
+    }.observeOn(Schedulers.single())
+        .subscribeOn(Schedulers.computation())
+        .subscribe { println("subscribed: $it - ${Thread.currentThread().name}") }
+
+    delay(100)
+
+    println("end!")
+
 }
