@@ -12,7 +12,8 @@ import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking<Unit> {
 //    MixedSubscribeOnAndObserveOn()
-    observeOnUnderSubscriptOn()
+//    observeOnUnderSubscriptOn()
+    subscribeOnMultipleTimes()
 }
 
 
@@ -51,6 +52,27 @@ private suspend fun observeOnUnderSubscriptOn() {
             println("processing in ${Thread.currentThread().name}")
             it
         }.observeOn(Schedulers.single())
+        .subscribeOn(Schedulers.computation())
+        .subscribe { println("subscribed: $it - ${Thread.currentThread().name}") }
+
+    delay(100)
+
+    println("end!")
+}
+
+/**
+ * subscribeOn을 중복해서 사용하면 먼저 선언된 Scheduler로 동작함
+ * */
+private suspend fun subscribeOnMultipleTimes() {
+    println("start!")
+
+    val ob = Observable.just(1)
+
+    ob.subscribeOn(Schedulers.io())
+        .map {
+            println("processing in ${Thread.currentThread().name}")
+            it
+        }
         .subscribeOn(Schedulers.computation())
         .subscribe { println("subscribed: $it - ${Thread.currentThread().name}") }
 
