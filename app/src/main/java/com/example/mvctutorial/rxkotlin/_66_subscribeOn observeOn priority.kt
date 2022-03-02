@@ -82,6 +82,12 @@ private suspend fun subscribeOnMultipleTimes() {
     println("end!")
 }
 
+/**
+ * subscribeOn은 어디에 선언되든 Observable과 subscribe가 동작되는 전체 Scheduler를 지정.
+ * subscribeOn이 여러개 선언되면, 가장 먼저 선언된 Scheduler로 동작.
+ * subscribeOn과 observeOn이 혼용될 경우 subscribeOn은 observeOn 선언 직전 부분의 코드를 실행하고,
+ * observeOn 선언 이후부터는 observeOn에서 선언된 Scheduler로 동작.
+*/
 private suspend fun isTheSubscribeOnLocationImportant() {
     println("start!")
 
