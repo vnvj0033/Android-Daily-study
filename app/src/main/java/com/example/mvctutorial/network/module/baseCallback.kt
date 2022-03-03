@@ -4,7 +4,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-fun <T> baseCallback(retrofitDataListener: DataListener<T>): Callback<T> {
+fun <T> baseCallback(dataListener: DataListener<T>): Callback<T> {
 
     return object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -12,14 +12,14 @@ fun <T> baseCallback(retrofitDataListener: DataListener<T>): Callback<T> {
             val result = response.body()
 
             if (response.isSuccessful && result != null) {
-                retrofitDataListener.onSuccess(result)
+                dataListener.onSuccess(result)
             } else {
-                retrofitDataListener.onFailed()
+                dataListener.onFailed()
             }
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
-            retrofitDataListener.onFailed()
+            dataListener.onFailed()
         }
     }
 }

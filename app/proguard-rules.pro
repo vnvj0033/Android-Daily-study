@@ -1,1 +1,1 @@
--keep class com.example.mvctutorial.network.Post {*;}
+-keep class com.example.mvctutorial.network.module.model.Post {*;}

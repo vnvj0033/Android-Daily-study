@@ -11,4 +11,8 @@ class PostLoader {
     fun getPost(map: Map<String, String>, dataListener: DataListener<Post>) {
         postApi.getPost(map).enqueue(baseCallback(dataListener))
     }
+
+    fun getPost(id: Int, dataListener: DataListener<Post>) {
+        postApi.getPost(id).enqueue(baseCallback(dataListener))
+    }
 }

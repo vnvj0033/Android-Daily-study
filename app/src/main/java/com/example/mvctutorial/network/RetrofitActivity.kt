@@ -17,11 +17,10 @@ class RetrofitActivity : AppCompatActivity() {
     }
 
     private fun loadPost(id: Int) {
-        val requester = Requester.getPost(id.toString())
 
         val postLoader = PostLoader()
 
-        postLoader.getPost(requester, object : DataListener<Post> {
+        postLoader.getPost(id, object : DataListener<Post> {
             override fun onSuccess(data: Post) {
                 findViewById<TextView>(R.id.textView).text = data.title
             }
