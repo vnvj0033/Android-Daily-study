@@ -28,7 +28,7 @@ public final class Teacher_MembersInjector implements MembersInjector<Teacher> {
     injectName(instance, nameProvider.get());
   }
 
-  @InjectedFieldSignature("com.example.mvctutorial.di.ex4namedannotation.Teacher.name")
+  @InjectedFieldSignature("com.example.mvctutorial.di_pre.ex4namedannotation.Teacher.name")
   @Named("Teacher")
   public static void injectName(Teacher instance, String name) {
     instance.name = name;
