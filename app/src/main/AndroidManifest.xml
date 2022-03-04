@@ -15,7 +15,7 @@
             android:name=".network.RetrofitActivity"
             android:exported="false" />
         <activity
-            android:name=".di.DIActivity"
+            android:name=".di_pre.DIActivity"
             android:exported="true" />
         <activity
             android:name=".navigate.NavigateActivity"
