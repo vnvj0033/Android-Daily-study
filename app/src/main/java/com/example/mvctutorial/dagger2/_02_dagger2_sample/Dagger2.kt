@@ -1,5 +1,9 @@
-package com.example.mvctutorial.dagger2
+package com.example.mvctutorial.dagger2._02_dagger2_sample
 
+import com.example.mvctutorial.dagger2._01_di_sample.IronMan
+import com.example.mvctutorial.dagger2._01_di_sample.Person
+import com.example.mvctutorial.dagger2._01_di_sample.Suit
+import com.example.mvctutorial.dagger2._01_di_sample.Weapon
 import dagger.Component
 import dagger.Module
 import dagger.Provides

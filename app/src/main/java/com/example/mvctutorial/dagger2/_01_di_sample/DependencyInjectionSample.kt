@@ -1,4 +1,4 @@
-package com.example.mvctutorial.dagger2
+package com.example.mvctutorial.dagger2._01_di_sample
 
 interface Person {
     fun name(): String
