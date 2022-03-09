@@ -15,20 +15,28 @@ class HeroModule {
     fun providePerson(): Person = IronMan()
     @Provides
     fun provideWeapon(): Weapon = Suit()
+    @Provides
+    fun provideHero(person: Person, weapon: Weapon) = Hero(person, weapon)
 }
 
 
 @Component(modules = [HeroModule::class])
 interface HeroComponent {
     fun inject(hero: Hero)
+    fun callHero(): Hero
 }
 
 class Hero {
-
     @Inject
     lateinit var person: Person
     @Inject
     lateinit var weapon: Weapon
+
+    constructor()
+    constructor(person: Person, weapon: Weapon) {
+        this.person = person
+        this.weapon = weapon
+    }
 
     fun info() {
         println("name: ${person.name()} skill: ${person.skill()} | weapon:${weapon.type()}")
@@ -40,4 +48,7 @@ fun main() {
     DaggerHeroComponent.create().inject(hero)
 
     hero.info()
+
+    val h2 = DaggerHeroComponent.create().callHero()
+    h2.info()
 }

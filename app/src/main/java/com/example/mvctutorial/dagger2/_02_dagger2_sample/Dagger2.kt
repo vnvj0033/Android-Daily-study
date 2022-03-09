@@ -21,7 +21,7 @@ class HeroModule {
     fun provideWeapon(): Weapon = Suit()
 
     @Provides
-    fun provideHero(person: Person, weapon: Weapon) = HeroDagger(person, weapon)
+    fun provideHero(person: Person, weapon: Weapon) = Hero(person, weapon)
 }
 
 /**
@@ -29,13 +29,23 @@ class HeroModule {
  * */
 @Component(modules = [HeroModule::class])
 interface HeroComponent {
-    fun callHero(): HeroDagger
+    fun callHero(): Hero
+    fun callWeapon(): Weapon
+    fun callPerson(): Person
 }
 
 /**
  * Component에서 Hero 객체 자체를 생성하는 객체가 필요
  * */
-class HeroDagger @Inject constructor(val person: Person, val weapon: Weapon) {
+class Hero {
+    val person: Person
+    val weapon: Weapon
+
+    @Inject constructor(person: Person,  weapon: Weapon) {
+        this.person = person
+        this.weapon = weapon
+    }
+
     fun info() {
         println("name: ${person.name()} skill: ${person.skill()} | weapon:${weapon.type()}")
     }
@@ -44,4 +54,9 @@ class HeroDagger @Inject constructor(val person: Person, val weapon: Weapon) {
 fun main() {
     val hero = DaggerHeroComponent.create().callHero()
     hero.info()
+
+    val person = DaggerHeroComponent.create().callPerson()
+    val weapon = DaggerHeroComponent.create().callWeapon()
+
+    println(person.name() + " " + weapon.type())
 }
