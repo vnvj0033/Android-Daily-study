@@ -41,4 +41,5 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, RetrofitActivity::class.java)
         startActivity(intent)
     }
+
 }
