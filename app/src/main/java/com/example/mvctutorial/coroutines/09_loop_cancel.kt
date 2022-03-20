@@ -3,6 +3,11 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
+//    cancellationIsCooperative()
+    closingResourcesWithFinally()
+}
+
+suspend fun cancellationIsCooperative() = coroutineScope {
     val startTime = System.currentTimeMillis()
     val job = launch(Dispatchers.Default) {
         var nextPrintTime = startTime
@@ -16,7 +21,25 @@ fun main() = runBlocking {
             }
         }
     }
-    delay (1300L) // delay a bit
+    delay(1300L) // delay a bit
+    println("main: I'm tired of waiting!")
+    job.cancelAndJoin() // cancels the job and waits for its completion
+    println("main: Now I can quit.")
+}
+
+
+suspend fun closingResourcesWithFinally() = coroutineScope {
+    val job = launch {
+        try {
+            repeat(1000) { i ->
+                println("I'm sleeping $i ...")
+                delay(500L)
+            }
+        } finally {
+            println("I'm running finally")
+        }
+    }
+    delay(1300L) // delay a bit
     println("main: I'm tired of waiting!")
     job.cancelAndJoin() // cancels the job and waits for its completion
     println("main: Now I can quit.")
