@@ -4,7 +4,8 @@ import kotlinx.coroutines.*
 
 fun main() = runBlocking {
 //    cancellationIsCooperative()
-    closingResourcesWithFinally()
+//    closingResourcesWithFinally()
+    withTimeoutOrNull()
 }
 
 suspend fun cancellationIsCooperative() = coroutineScope {
@@ -43,4 +44,15 @@ suspend fun closingResourcesWithFinally() = coroutineScope {
     println("main: I'm tired of waiting!")
     job.cancelAndJoin() // cancels the job and waits for its completion
     println("main: Now I can quit.")
+}
+
+suspend fun withTimeoutOrNull() = coroutineScope {
+    val result = withTimeoutOrNull(1300L) {
+        repeat(1000) { i ->
+            println("I'm sleeping $i ...")
+            delay(500L)
+        }
+        "Done" // will get cancelled before it produces this result
+    }
+    println("Result is $result")
 }
