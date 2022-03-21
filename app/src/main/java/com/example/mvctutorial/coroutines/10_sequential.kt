@@ -4,15 +4,26 @@ import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
 fun main() = runBlocking {
-    sequentialIsDefault()
+//    sequentialIsDefault()
+    concurrentUsingAsync()
 }
 
-suspend fun sequentialIsDefault() {
+suspend fun sequentialIsDefault() = coroutineScope {
     val time = measureTimeMillis {
         val one = doSomethingUsefulOne()
         val two = doSomethingUsefulTwo()
 
         println("The answer is ${one + two}")
+    }
+    println("Completed in $time ms")
+}
+
+suspend fun concurrentUsingAsync() = coroutineScope {
+    val time = measureTimeMillis {
+        val one = async { doSomethingUsefulOne() }
+        val two = async { doSomethingUsefulTwo() }
+
+        println("The answer is ${one.await() + two.await()}")
     }
     println("Completed in $time ms")
 }
