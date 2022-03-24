@@ -5,6 +5,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * 코루틴의 기본 특징은 코루틴 필드 내에 coroutineScope의 비동기 작업 순서를 보장한다.
+ * */
 fun main() = runBlocking { // this: CoroutineScope
     launch {
         delay(200L)
