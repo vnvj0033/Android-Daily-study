@@ -46,6 +46,8 @@ suspend fun closingResourcesWithFinally() = coroutineScope {
     println("main: Now I can quit.")
 }
 
+// Job으로 cancel하지 않고, 특정 시간이후에 취소하도록 하려면 withTimeout을 사용
+// withTimeoutOrNull은 타임아웃시 null 반환 정상 종료면 마지막 값을 반환
 suspend fun withTimeoutOrNull() = coroutineScope {
     val result = withTimeoutOrNull(1300L) {
         repeat(1000) { i ->
