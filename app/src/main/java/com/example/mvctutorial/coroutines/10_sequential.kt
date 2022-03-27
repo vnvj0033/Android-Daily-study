@@ -6,7 +6,8 @@ import kotlin.system.measureTimeMillis
 fun main() = runBlocking {
 //    sequentialIsDefault()
 //    concurrentUsingAsync()
-    lazilyStartedSync()
+//    lazilyStartedSync()
+    asyncStyleFunctions()
 }
 
 /**
@@ -51,6 +52,25 @@ private suspend fun lazilyStartedSync() = coroutineScope {
 
 }
 
+/**
+ * GlobalScope을 이용해서 명시적으로 async 함수를 만들면 suspend function이 아니여
+ * 어디서든 호출되어 사용할 수 있습니다.
+ * */
+private suspend fun asyncStyleFunctions() {
+    val time = measureTimeMillis {
+        // we can initiate async actions outside of a coroutine
+        val one = somethingUsefulOneAsync()
+        val two = somethingUsefulTwoAsync()
+        // but waiting for a result must involve either suspending or blocking.
+        // here we use `runBlocking { ... }` to block the main thread while waiting for the result
+        runBlocking {
+            println("The answer is ${one.await() + two.await()}")
+        }
+    }
+    println("Completed in $time ms")
+}
+
+
 private suspend fun doSomethingUsefulOne(): Int {
     delay(1000L) // pretend we are doing something useful here
     return 13
@@ -60,3 +80,12 @@ private suspend fun doSomethingUsefulTwo(): Int {
     delay(1000L) // pretend we are doing something useful here, too
     return 29
 }
+
+
+/**
+ * GlobalScoped에서 async coroutine builder를 사용하여 명시적으로 비동기 형식의 함수를 만들수 있음
+ * */
+private fun somethingUsefulOneAsync() = GlobalScope.async { doSomethingUsefulOne() }
+
+private fun somethingUsefulTwoAsync() = GlobalScope.async { doSomethingUsefulTwo() }
+
