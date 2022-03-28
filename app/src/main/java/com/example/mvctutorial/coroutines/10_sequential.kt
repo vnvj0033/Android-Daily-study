@@ -7,7 +7,8 @@ fun main() = runBlocking {
 //    sequentialIsDefault()
 //    concurrentUsingAsync()
 //    lazilyStartedSync()
-    asyncStyleFunctions()
+//    asyncStyleFunctions()
+    asyncStyleSaveMemoryLeak()
 }
 
 /**
@@ -70,6 +71,22 @@ private suspend fun asyncStyleFunctions() {
     println("Completed in $time ms")
 }
 
+/**
+ * asyncStyleFunctions경우 await가 runBlocking 내부에 있어 runBlocking 이전 exception에 메모리 누수가 일어난다.
+ * 다음의 경우 보다 메모리 누수에 안전하다.
+ * */
+private suspend fun asyncStyleSaveMemoryLeak() {
+    val time = measureTimeMillis {
+        println("The answer is ${concurrentSum()}")
+    }
+    println("Completed in $time ms")
+}
+
+private suspend fun concurrentSum(): Int = coroutineScope {
+    val one = async { doSomethingUsefulOne() }
+    val two = async { doSomethingUsefulTwo() }
+    one.await() + two.await()
+}
 
 private suspend fun doSomethingUsefulOne(): Int {
     delay(1000L) // pretend we are doing something useful here
