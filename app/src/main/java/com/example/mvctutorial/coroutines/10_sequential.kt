@@ -1,5 +1,6 @@
 package com.example.mvctutorial.coroutines
 
+import android.util.Log
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
@@ -8,7 +9,8 @@ fun main() = runBlocking {
 //    concurrentUsingAsync()
 //    lazilyStartedSync()
 //    asyncStyleFunctions()
-    asyncStyleSaveMemoryLeak()
+//    asyncStyleSaveMemoryLeak()
+    scopeException()
 }
 
 /**
@@ -80,6 +82,50 @@ private suspend fun asyncStyleSaveMemoryLeak() {
         println("The answer is ${concurrentSum()}")
     }
     println("Completed in $time ms")
+}
+
+private fun scopeException() {
+    runBlocking {
+        var value = 0
+        try {
+            value = failedConcurrentSum()
+        } catch (e: ArithmeticException) {
+            println("Computation failed with ArithmeticException")
+        } finally {
+            println("Main fianlly, value = $value")
+        }
+    }
+}
+
+suspend fun failedConcurrentSum(): Int = coroutineScope {
+    val one = async {
+        println("first async")
+        try {
+            delay(Long.MAX_VALUE) // Emulates very long computation
+            42
+        } finally {
+            println("First child was cancelled")
+        }
+    }
+
+    val two = async {
+        println("second async")
+        try {
+            delay(Long.MAX_VALUE) // Emulates very long computation
+            42
+        } catch (e: CancellationException) {
+            println("second child was cancelled")
+            42
+        }
+    }
+
+    val three = async {
+        println("Third child throws an exception")
+        throw ArithmeticException()
+        42
+    }
+
+    one.await() + two.await() + three.await()
 }
 
 private suspend fun concurrentSum(): Int = coroutineScope {
