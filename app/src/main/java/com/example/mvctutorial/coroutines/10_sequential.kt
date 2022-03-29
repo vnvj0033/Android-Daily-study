@@ -99,7 +99,7 @@ private fun scopeException() {
     }
 }
 
-suspend fun failedConcurrentSum(): Int = coroutineScope {
+private suspend fun failedConcurrentSum(): Int = coroutineScope {
     val one = async {
         println("first async")
         try {
@@ -157,8 +157,4 @@ private suspend fun doSomethingUsefulTwo(): Int {
 private fun somethingUsefulOneAsync() = GlobalScope.async { doSomethingUsefulOne() }
 
 private fun somethingUsefulTwoAsync() = GlobalScope.async { doSomethingUsefulTwo() }
-
-fun ma() {
-
-}
 
