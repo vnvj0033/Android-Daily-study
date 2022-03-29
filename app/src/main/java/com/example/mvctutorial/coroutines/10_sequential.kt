@@ -1,6 +1,5 @@
 package com.example.mvctutorial.coroutines
 
-import android.util.Log
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
@@ -84,6 +83,9 @@ private suspend fun asyncStyleSaveMemoryLeak() {
     println("Completed in $time ms")
 }
 
+/**
+ * 코루틴 예외 상황에서 coroutineScope의 async가 취소됨을 볼수 있는 함수
+ * */
 private fun scopeException() {
     runBlocking {
         var value = 0
@@ -128,6 +130,10 @@ suspend fun failedConcurrentSum(): Int = coroutineScope {
     one.await() + two.await() + three.await()
 }
 
+/**
+ * async는 coroutineScope의 extention 함수.
+ * 따라서 exception이 발생하면 해당 scope을 빠져나가면서 해당 coroutineScope에서 수행되었던 자식 coroutine 모두 취소
+ * */
 private suspend fun concurrentSum(): Int = coroutineScope {
     val one = async { doSomethingUsefulOne() }
     val two = async { doSomethingUsefulTwo() }
@@ -151,4 +157,8 @@ private suspend fun doSomethingUsefulTwo(): Int {
 private fun somethingUsefulOneAsync() = GlobalScope.async { doSomethingUsefulOne() }
 
 private fun somethingUsefulTwoAsync() = GlobalScope.async { doSomethingUsefulTwo() }
+
+fun ma() {
+
+}
 
