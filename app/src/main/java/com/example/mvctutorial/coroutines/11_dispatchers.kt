@@ -4,7 +4,8 @@ import kotlinx.coroutines.*
 
 fun main() {
 //    dispatchersAndThreads()
-    unconfinedAndConfinedDispatcher()
+//    unconfinedAndConfinedDispatcher()
+    debuggingCoroutinesAndThreads()
 }
 
 /**
@@ -49,4 +50,22 @@ private fun unconfinedAndConfinedDispatcher() = runBlocking {
         delay(1000)
         println("main runBlocking: After delay in thread ${Thread.currentThread().name}")
     }
+}
+
+/**
+ * 코루틴은 suspend와 resume이 반복되면서 다른 thread로 변경될 수 있다.
+ * -Dkotlinx.coroutines.debug를 JVM option에 추가하면 coroutine에 대한 정보도 로그로 남길 수 있다.
+ * */
+private fun debuggingCoroutinesAndThreads() = runBlocking {
+    val a = async {
+        println("[${Thread.currentThread().name}] I'm computing a piece of the answer")
+        6
+    }
+
+    val b = async {
+        println("[${Thread.currentThread().name}] I'm computing another piece of the answer")
+        7
+    }
+
+    println("[${Thread.currentThread().name}] The answer is ${a.await() * b.await()}")
 }
