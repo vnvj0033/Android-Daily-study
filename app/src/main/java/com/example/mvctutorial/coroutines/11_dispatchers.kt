@@ -5,7 +5,8 @@ import kotlinx.coroutines.*
 fun main() {
 //    dispatchersAndThreads()
 //    unconfinedAndConfinedDispatcher()
-    debuggingCoroutinesAndThreads()
+//    debuggingCoroutinesAndThreads()
+    jumpingBetweenThreads()
 }
 
 /**
@@ -68,4 +69,23 @@ private fun debuggingCoroutinesAndThreads() = runBlocking {
     }
 
     println("[${Thread.currentThread().name}] The answer is ${a.await() * b.await()}")
+}
+
+/**
+ * use는 Closeable클래스에 예외상황에도 close를 보장
+ * 하나의 coroutine이 어떻게 다른 thread에서 분리되어 실행되는지 예제
+ * */
+@OptIn(ObsoleteCoroutinesApi::class)
+private fun jumpingBetweenThreads() {
+    newSingleThreadContext("Ctx1").use { ctx1 ->
+        newSingleThreadContext("Ctx2").use { ctx2 ->
+            runBlocking(ctx1) {
+                println("[${Thread.currentThread().name}] Started in ctx1")
+                withContext(ctx2) {
+                    println("[${Thread.currentThread().name}] Working in ctx2")
+                }
+                println("[${Thread.currentThread().name}] Back to ctx1")
+            }
+        }
+    }
 }
