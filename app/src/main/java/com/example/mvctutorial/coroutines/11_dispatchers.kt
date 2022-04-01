@@ -7,7 +7,8 @@ fun main() {
 //    unconfinedAndConfinedDispatcher()
 //    debuggingCoroutinesAndThreads()
 //    jumpingBetweenThreads()
-    jobInTheContext()
+//    jobInTheContext()
+    childrenOfACoroutine()
 }
 
 /**
@@ -97,4 +98,34 @@ private fun jumpingBetweenThreads() {
  * */
 private fun jobInTheContext() = runBlocking {
     println("My job is ${coroutineContext[Job]}")
+}
+
+/**
+ * job1은 GlobalScope의 launch이기 대문에 request의 자식이 아님
+ * 따라서 request Job을 cancel해도 job1은 취소되지 않음.
+ * */
+private fun childrenOfACoroutine() = runBlocking {
+    // launch a coroutine to process some kind of incoming request
+    val request = launch {// it spawns two other jobs, one with GlobalScope
+        GlobalScope.launch {
+            println("job1: I run in GlobalScope and execute independently!")
+            delay(1000)
+            println("job1: I am not affected by cancellation of the request")
+        }
+        // and the other inherits the parent context
+        launch {
+            delay(100)
+            println("job2: I am a child of the request coroutine")
+            delay(1000)
+            println("job2: I will not execute this line if my parent request is cancelled")
+        }
+    }
+
+    delay(500)
+    request.cancel()
+    // cancel processing of the request
+    delay(1000)
+    // delay a second to see what happens
+    println("main: Who has survived request cancellation?")
+
 }
