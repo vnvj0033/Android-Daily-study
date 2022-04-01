@@ -6,7 +6,8 @@ fun main() {
 //    dispatchersAndThreads()
 //    unconfinedAndConfinedDispatcher()
 //    debuggingCoroutinesAndThreads()
-    jumpingBetweenThreads()
+//    jumpingBetweenThreads()
+    jobInTheContext()
 }
 
 /**
@@ -88,4 +89,12 @@ private fun jumpingBetweenThreads() {
             }
         }
     }
+}
+
+/**
+ * Job은 context의 일부, coroutineContext[Job]을 통해 job을 코드안에서 추출 가능
+ * 따라서 coroutineScope 내에서 Job 사용가능
+ * */
+private fun jobInTheContext() = runBlocking {
+    println("My job is ${coroutineContext[Job]}")
 }
