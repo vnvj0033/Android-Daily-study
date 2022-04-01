@@ -8,7 +8,8 @@ fun main() {
 //    debuggingCoroutinesAndThreads()
 //    jumpingBetweenThreads()
 //    jobInTheContext()
-    childrenOfACoroutine()
+//    childrenOfACoroutine()
+    childrenOfDispatchers()
 }
 
 /**
@@ -128,4 +129,37 @@ private fun childrenOfACoroutine() = runBlocking {
     // delay a second to see what happens
     println("main: Who has survived request cancellation?")
 
+}
+
+/**
+ * 다음 Dispatcher는 모두 job의 chlid여서 job cancel시 모두 작업이 취소된다.
+ * */
+fun childrenOfDispatchers() = runBlocking {
+    val job = launch(newSingleThreadContext("Parent Thread")) {
+        launch { // context of the parent, main runBlocking coroutine
+            println("main runBlocking#1 :my thread ${Thread.currentThread().name}")
+            delay(1000L)
+            println("main runBlocking#2 : my thread ${Thread.currentThread().name}")
+        }
+
+        launch(Dispatchers.Unconfined) { // not confined -- will work with main thread
+            println("Unconfined#1 : my thread ${Thread.currentThread().name}")
+            delay(1000L)
+            println("Unconfined#2 : my thread ${Thread.currentThread().name}")
+        }
+
+        launch(Dispatchers.Default) { // will get dispatched to DefaultDispatcher
+            println("Default#1 : my thread ${Thread.currentThread().name}")
+            delay(1000L)
+            println("Default#2 : my thread ${Thread.currentThread().name}")
+        }
+
+        launch(newSingleThreadContext("MyOwnThread")) { // will get its own new thread
+            println("newSingleThreadContext#1: my thread ${Thread.currentThread().name}")
+            delay(1000L)
+            println("newSingleThreadContext#2: my thread ${Thread.currentThread().name}")
+        }
+    }
+    delay(500L)
+    job.cancelAndJoin()
 }
