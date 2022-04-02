@@ -9,7 +9,8 @@ fun main() {
 //    jumpingBetweenThreads()
 //    jobInTheContext()
 //    childrenOfACoroutine()
-    childrenOfDispatchers()
+//    childrenOfDispatchers()
+    parentalResponsibilities()
 }
 
 /**
@@ -162,4 +163,24 @@ fun childrenOfDispatchers() = runBlocking {
     }
     delay(500L)
     job.cancelAndJoin()
+}
+
+/**
+ * 부모 coroutine은 자식 coroutine이 끝날때까지 항상 대기
+ * */
+private fun parentalResponsibilities() = runBlocking {
+    // launch a coroutine to process some kind of incoming request
+    val request = launch {
+        repeat(3) { i -> // launch a few children jobs
+            launch {
+                delay((i + 1) * 200L)
+                // variable delay 200ms, 400ms, 600ms
+                println("Coroutine $i is done")
+            }
+        }
+        println("request: I'm done and I don't explicitly join my children that are still active")
+    }
+    request.join()
+// wait for completion of the request, including all its children
+    println("Now processing of the request is complete")
 }
