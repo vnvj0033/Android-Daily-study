@@ -10,7 +10,8 @@ fun main() {
 //    jobInTheContext()
 //    childrenOfACoroutine()
 //    childrenOfDispatchers()
-    parentalResponsibilities()
+//    parentalResponsibilities()
+    namingCoroutinesForDebugging()
 }
 
 /**
@@ -183,4 +184,25 @@ private fun parentalResponsibilities() = runBlocking {
     request.join()
 // wait for completion of the request, including all its children
     println("Now processing of the request is complete")
+}
+
+/**
+ * 코루틴 쓰레드에도 이름을 줄수 있다.
+ * */
+private fun namingCoroutinesForDebugging() = runBlocking(CoroutineName("main")) {
+    println("[${Thread.currentThread().name}]Started main coroutine")
+    // run two background value computations
+    val v1 = async(CoroutineName("v1coroutine")) {
+        delay(500)
+        println("[${Thread.currentThread().name}]Computing v1")
+        252
+    }
+
+    val v2 = async(CoroutineName("v2coroutine")) {
+        delay(1000)
+        println("[${Thread.currentThread().name}]Computing v2")
+        6
+    }
+    println("[${Thread.currentThread().name}]The answer for v1 / v2 = ${v1.await() / v2.await()}")
+
 }
