@@ -11,7 +11,8 @@ fun main() {
 //    childrenOfACoroutine()
 //    childrenOfDispatchers()
 //    parentalResponsibilities()
-    namingCoroutinesForDebugging()
+//    namingCoroutinesForDebugging()
+    combiningContextElements()
 }
 
 /**
@@ -205,4 +206,13 @@ private fun namingCoroutinesForDebugging() = runBlocking(CoroutineName("main")) 
     }
     println("[${Thread.currentThread().name}]The answer for v1 / v2 = ${v1.await() / v2.await()}")
 
+}
+
+/**
+ * coroutine context는 복합적으로 사용할 수 있으며 + 연산자를 사용하여 적용할 수 있다.
+ * */
+private fun combiningContextElements() = runBlocking {
+    launch(Dispatchers.Default + CoroutineName("test")) {
+        println("I'm working in thread ${Thread.currentThread().name}")
+    }
 }
