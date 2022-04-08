@@ -115,6 +115,15 @@ private fun threadLocalData() = runBlocking {
         println("Launch start, current thread: ${Thread.currentThread()}, thread local value: '${threadLocal.get()}'")
         yield()
         println("After yield, current thread: ${Thread.currentThread()}, thread local value: '${threadLocal.get()}'")
+
+
+        // 스코프에서 값을 변경하려면 withContext를 사용
+        threadLocal.set("main")
+        withContext(threadLocal.asContextElement("foo")) {
+            println(threadLocal.get()) // Prints "main"
+            threadLocal.set("UI")
+        }
+        println(threadLocal.get()) // Prints "main", not "UI"
     }
     job.join()
     println ("Post-main, current thread: ${Thread.currentThread()}, thread local value: '${threadLocal.get()}'")
