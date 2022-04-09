@@ -104,7 +104,7 @@ private class DbWorker : CoroutineScope {
  *  coroutine의 경우 특정 코루틴 내부에서만 사용되는 local data를 지정할 수 있습니다.
  *  ThreadLocal에 set으로 main을 저장하지만 asContentElement에 launch를 지정하여 코루틴 스코프 내에서는 launch값을 얻음
  */
-val threadLocal = ThreadLocal<String?>() // declare thread-local variable
+private val threadLocal = ThreadLocal<String?>() // declare thread-local variable
 private fun threadLocalData() = runBlocking {
 
     threadLocal.set("main")
