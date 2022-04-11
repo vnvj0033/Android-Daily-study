@@ -4,7 +4,8 @@ import kotlinx.coroutines.*
 
 fun main() {
 //    exceptionPropagation()
-    coroutineExceptionHandler()
+//    coroutineExceptionHandler()
+    cancellationAndExceptions()
 }
 
 /**
@@ -45,4 +46,25 @@ private fun coroutineExceptionHandler() = runBlocking {
         throw ArithmeticException() // Nothing will be printed, relying on user to call deferred.await()
     }
     joinAll(job, deferred)
+}
+
+/**
+ * cancel시 발생하는 CancellationException은 어떠한 핸들링도 받지 않음
+ * */
+private fun cancellationAndExceptions() = runBlocking {
+    val job = launch {
+        val child = launch {
+            try { delay(Long.MAX_VALUE) }
+//            catch(e: CancellationException) { println("CancellationException catch") } // 없어도 exception으로 종료되지 않음
+            finally { println("Child is cancelled") }
+        }
+        yield()
+        println("Cancelling child")
+        child.cancel()
+        child.join()
+        yield()
+        println("Parent is not cancelled")
+    }
+
+    job.join()
 }
