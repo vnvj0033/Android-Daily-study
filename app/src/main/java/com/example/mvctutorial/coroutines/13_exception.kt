@@ -3,7 +3,8 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() {
-    exceptionPropagation()
+//    exceptionPropagation()
+    coroutineExceptionHandler()
 }
 
 /**
@@ -24,9 +25,24 @@ private fun exceptionPropagation() = runBlocking {
     }
     try {
         deferred.await()
-        println ("Unreached")
+        println("Unreached")
     } catch (e: ArithmeticException) {
         println("Caught ArithmeticException")
     }
 
+}
+
+/**
+ * CoroutineExceptionHandler를 이용하여 coroutine 내부의 기본 catch block으로 사용할 수 있다
+ * 예제를 보면 launch에서 발생한 exception만 처리, async처럼 await()를 만나야 exception이 발생하는 경우에는 동작하지 않음
+ * */
+private fun coroutineExceptionHandler() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught $exception")
+    }
+    val job = GlobalScope.launch(handler) { throw AssertionError() }
+    val deferred = GlobalScope.async(handler) {
+        throw ArithmeticException() // Nothing will be printed, relying on user to call deferred.await()
+    }
+    joinAll(job, deferred)
 }
