@@ -5,7 +5,8 @@ import kotlinx.coroutines.*
 fun main() {
 //    exceptionPropagation()
 //    coroutineExceptionHandler()
-    cancellationAndExceptions()
+//    cancellationAndExceptions()
+    cancellationAndExceptions2()
 }
 
 /**
@@ -54,9 +55,13 @@ private fun coroutineExceptionHandler() = runBlocking {
 private fun cancellationAndExceptions() = runBlocking {
     val job = launch {
         val child = launch {
-            try { delay(Long.MAX_VALUE) }
+            try {
+                delay(Long.MAX_VALUE)
+            }
 //            catch(e: CancellationException) { println("CancellationException catch") } // 없어도 exception으로 종료되지 않음
-            finally { println("Child is cancelled") }
+            finally {
+                println("Child is cancelled")
+            }
         }
         yield()
         println("Cancelling child")
@@ -67,4 +72,36 @@ private fun cancellationAndExceptions() = runBlocking {
     }
 
     job.join()
+}
+
+/**
+ * Coroutine은 취소를 제외한 다른 exception이 발생하면 부모의 corouitne까지 모두 취소
+ * 자식 코루틴에서 exception이 발생되면 다른 자식 코루틴이 모두 취소된 이후에 부모에 의해서 exception이 handling됨
+ * */
+private fun cancellationAndExceptions2() = runBlocking {
+
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught $exception")
+    }
+    val job = GlobalScope.launch(handler) {
+        launch { // the first child
+            try {
+                delay(Long.MAX_VALUE)
+            } finally {
+                withContext(NonCancellable) {
+                    println("Children are cancelled, but exception is not handled until all children terminate")
+                    delay(100)
+                    println("The first child finished its non cancellable block")
+                }
+            }
+        }
+
+        launch { // the second child
+            delay(10)
+            println("Second child throws an exception")
+            throw ArithmeticException()
+        }
+    }
+    job.join()
+    println("End runBlocking")
 }
