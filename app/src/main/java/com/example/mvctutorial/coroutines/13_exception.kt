@@ -1,12 +1,14 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
+import java.io.IOException
 
 fun main() {
 //    exceptionPropagation()
 //    coroutineExceptionHandler()
 //    cancellationAndExceptions()
-    cancellationAndExceptions2()
+//    cancellationAndExceptions2()
+    exceptionAggregation()
 }
 
 /**
@@ -104,4 +106,30 @@ private fun cancellationAndExceptions2() = runBlocking {
     }
     job.join()
     println("End runBlocking")
+}
+
+/**
+ * 자식 coroutine에서 여러개의 exception이 발생할 경우 가장 먼저 발생한 exception이 handler로 전달
+ * 나머지 exception은 무시
+ * */
+private fun exceptionAggregation() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught $exception with suppressed ${exception.suppressed.contentToString()}")
+    }
+    val job = GlobalScope.launch(handler) {
+        launch {
+            try {
+                delay(Long.MAX_VALUE)
+            } finally {
+                throw ArithmeticException()
+            }
+        }
+        launch {
+            delay(100)
+            throw IOException()
+        }
+        delay(Long.MAX_VALUE)
+    }
+    job.join()
+
 }
