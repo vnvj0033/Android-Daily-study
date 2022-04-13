@@ -8,7 +8,8 @@ fun main() {
 //    coroutineExceptionHandler()
 //    cancellationAndExceptions()
 //    cancellationAndExceptions2()
-    exceptionAggregation()
+//    exceptionAggregation()
+    exceptionAggregation2()
 }
 
 /**
@@ -132,4 +133,23 @@ private fun exceptionAggregation() = runBlocking {
     }
     job.join()
 
+}
+
+/**
+ * 다만 CancellationException의 경우에는 throw 하더라도 handler에서 무시
+ * */
+private fun exceptionAggregation2() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught original $exception")
+    }
+    val job = GlobalScope.launch(handler) {
+        val inner = launch { launch { launch { throw IOException() } } }
+        try {
+            inner.join()
+        } catch (e: CancellationException) {
+            println("Rethrowing CancellationException with original cause")
+            throw e
+        }
+    }
+    job.join()
 }
