@@ -4,7 +4,8 @@ import kotlinx.coroutines.*
 import java.io.IOException
 
 fun main() {
-    supervisionJob()
+//    supervisionJob()
+    supervisionScope()
 }
 
 /**
@@ -15,10 +16,11 @@ private fun supervisionJob() = runBlocking {
     val supervisor = SupervisorJob()
     try {
         with(CoroutineScope(coroutineContext + supervisor)) {
-            val firstChild = launch(CoroutineExceptionHandler { _, exception -> println("caught $exception") }) {
-                println("First child is failing")
-                throw AssertionError("First child is cancelled")
-            }
+            val firstChild =
+                launch(CoroutineExceptionHandler { _, exception -> println("caught $exception") }) {
+                    println("First child is failing")
+                    throw AssertionError("First child is cancelled")
+                }
 
             // launch the second child
             val secondChild = launch {
@@ -44,3 +46,27 @@ private fun supervisionJob() = runBlocking {
     }
 }
 
+
+/**
+ * supervisorScope를 사용하면 부모로는 취소를 전달하지 않음
+ * */
+private fun supervisionScope() = runBlocking {
+    try {
+        supervisorScope {
+            val child = launch {
+                try {
+                    println("Child is sleeping")
+                    delay(Long.MAX_VALUE)
+                } finally {
+                    println("Child is cancelled")
+                }
+            }
+            // Give our child a chance to execute and print using yield
+            yield()
+            println("Throwing exception from scope")
+            throw AssertionError()
+        }
+    } catch (e: AssertionError) {
+        println("Caught assertion error")
+    }
+}
