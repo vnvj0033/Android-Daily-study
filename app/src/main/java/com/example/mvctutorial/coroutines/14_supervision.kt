@@ -5,7 +5,8 @@ import java.io.IOException
 
 fun main() {
 //    supervisionJob()
-    supervisionScope()
+//    supervisionScope()
+    supervisionScope2()
 }
 
 /**
@@ -48,7 +49,7 @@ private fun supervisionJob() = runBlocking {
 
 
 /**
- * supervisorScope를 사용하면 부모로는 취소를 전달하지 않음
+ * supervisorScope를 사용하면 부모로 취소를 전달하지 않음
  * */
 private fun supervisionScope() = runBlocking {
     try {
@@ -65,6 +66,31 @@ private fun supervisionScope() = runBlocking {
             yield()
             println("Throwing exception from scope")
             throw AssertionError()
+        }
+    } catch (e: AssertionError) {
+        println("Caught assertion error")
+    }
+}
+
+/**
+ * 해당 예제는 자식에서 예외를 처리해야 하지만 하지 않아서 프로세스가 죽는다.
+ * */
+private fun supervisionScope2() = runBlocking {
+    try {
+        supervisorScope {
+            val child = launch {
+                try {
+                    println("Child is sleeping")
+                    delay (Long.MAX_VALUE)
+                } finally {
+                    println("Child is cancelled")
+                }
+            }
+
+            val child2 = launch {
+                println("Throwing exception from scope")
+                throw AssertionError()
+            }
         }
     } catch (e: AssertionError) {
         println("Caught assertion error")
