@@ -1,12 +1,12 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
-import java.io.IOException
 
 fun main() {
 //    supervisionJob()
 //    supervisionScope()
-    supervisionScope2()
+//    supervisionScope2()
+    exceptionsInSupervisedCoroutines()
 }
 
 /**
@@ -94,5 +94,25 @@ private fun supervisionScope2() = runBlocking {
         }
     } catch (e: AssertionError) {
         println("Caught assertion error")
+    }
+}
+
+/**
+ * supervisorScope을 사용하는 경우 필요에 따서 각 자식 coroutine에 exception handler를 달아줘야함
+ * */
+private fun exceptionsInSupervisedCoroutines() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught $exception")
+    }
+    try {
+        supervisorScope {
+            val child = launch(handler) {
+                println("Child throws an exception")
+                throw AssertionError() }
+            println("Scope is completing")
+        }
+        println("Scope is completed")
+    } catch(e: Exception) {
+        println("Exception happen!")
     }
 }
