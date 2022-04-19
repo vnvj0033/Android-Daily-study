@@ -1,12 +1,14 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
+import java.io.IOException
 
 fun main() {
 //    supervisionJob()
 //    supervisionScope()
 //    supervisionScope2()
-    exceptionsInSupervisedCoroutines()
+//    exceptionsInSupervisedCoroutines()
+    summery()
 }
 
 /**
@@ -115,4 +117,35 @@ private fun exceptionsInSupervisedCoroutines() = runBlocking {
     } catch(e: Exception) {
         println("Exception happen!")
     }
+}
+
+
+private fun summery() = runBlocking {
+    val supervisorJob = SupervisorJob()
+
+    val handler = CoroutineExceptionHandler { _, exception -> println("Caught $exception") }
+
+    // case #1: supervisorJob으로 인해 process가 죽지않고 exception은 위로 전달해 준다.
+    // 따라서 정상적으로 handler가 동작한다.
+    launch(handler) {
+        launch {
+            launch(supervisorJob) { throw IOException() }
+        }
+    }
+
+    // case #2: supervisorJob으로 인해 process가 죽지않고 exception은 handler에서 바로 처리한다.
+    launch {
+        launch {
+            launch(supervisorJob + handler) { throw IOException() }
+        }
+    }
+
+    // case #3: exception이 발생한 상태에서는 supervisorJob과는 상관 없으므로 handler는 동작하지 못한다.
+    // 단 supervisorJob까지 exception이 올라오면 더이상 위로 올라가는걸 막는다.
+    launch(supervisorJob) {
+        launch {
+            launch(handler) { throw IOException() }
+        }
+    }
+
 }
