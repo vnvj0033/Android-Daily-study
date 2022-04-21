@@ -8,7 +8,8 @@ import kotlinx.coroutines.runBlocking
  * Channel은 두 Coroutine 사이에 정보를 교환하는 전달 객체이다.
  * */
 fun main() {
-    channels()
+//    channels()
+    closingAndIterationOverChannels()
 }
 
 /**
@@ -26,5 +27,18 @@ private fun channels() = runBlocking {
     }
     // here we print five received integers:
     repeat(5) { println(channel.receive()) }
+    println("Done!")
+}
+
+
+private fun closingAndIterationOverChannels() = runBlocking {
+    val channel = Channel<Int>()
+    launch {
+        for (x in 1..5) channel.send(x * x)
+        channel.close() // we're done sending
+     }
+
+    // here we print received values using `for` loop (until the channel is closed)
+    for (y in channel) println(y)
     println("Done!")
 }
