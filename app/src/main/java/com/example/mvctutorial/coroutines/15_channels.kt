@@ -4,6 +4,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * Channel은 두 Coroutine 사이에 정보를 교환하는 전달 객체이다.
+ * */
 fun main() {
     channels()
 }
