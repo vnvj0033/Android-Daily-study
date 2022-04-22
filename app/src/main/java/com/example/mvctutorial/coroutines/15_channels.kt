@@ -1,6 +1,9 @@
 package com.example.mvctutorial.coroutines
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -9,7 +12,8 @@ import kotlinx.coroutines.runBlocking
  * */
 fun main() {
 //    channels()
-    closingAndIterationOverChannels()
+//    closingAndIterationOverChannels()
+    buildingChannelProducers()
 }
 
 /**
@@ -43,5 +47,18 @@ private fun closingAndIterationOverChannels() = runBlocking {
 
     // here we print received values using `for` loop (until the channel is closed)
     for (y in channel) println(y)
+    println("Done!")
+}
+
+/**
+ * coroutine으로 producer-consumer 패턴으로 표현가능
+ * 생산하는 형태를 쉽게 구현하도록 제공하는 produce
+ * 확장 함수 consumeEach로 소비하는쪽에서 사용
+ * */
+private fun buildingChannelProducers() = runBlocking {
+    val squares = produce(Dispatchers.Default) {
+        for (x in 1..5) send(x * x)
+    }
+    squares.consumeEach { println(it) }
     println("Done!")
 }
