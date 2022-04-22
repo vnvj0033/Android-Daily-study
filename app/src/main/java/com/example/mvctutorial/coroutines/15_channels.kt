@@ -30,7 +30,10 @@ private fun channels() = runBlocking {
     println("Done!")
 }
 
-
+/**
+ * channel은 사용하지 않으면 close할 수 있다.
+ * close를 하더라도 이전 send값은 보장됨
+ * */
 private fun closingAndIterationOverChannels() = runBlocking {
     val channel = Channel<Int>()
     launch {
