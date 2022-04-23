@@ -1,6 +1,7 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
@@ -13,7 +14,8 @@ import kotlinx.coroutines.runBlocking
 fun main() {
 //    channels()
 //    closingAndIterationOverChannels()
-    buildingChannelProducers()
+//    buildingChannelProducers()
+    pipelines()
 }
 
 /**
@@ -61,4 +63,22 @@ private fun buildingChannelProducers() = runBlocking {
     }
     squares.consumeEach { println(it) }
     println("Done!")
+}
+
+
+
+/**
+ * produce는 receive시에 쓰레드를 대기하여 값을 보장
+ * */
+private fun pipelines() = runBlocking {
+    val numbers = produce {
+        var x = 1
+        while (true) send(x++)
+    }
+    val squares = produce {
+        for (x in numbers) send(x * x)
+    }
+    for (i in 1..5) println(squares.receive()) // print first five
+    println("Done!") // we are done
+    coroutineContext.cancelChildren() // cancel children coroutines
 }
