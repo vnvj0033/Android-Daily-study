@@ -1,12 +1,10 @@
 package com.example.mvctutorial.coroutines
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * Channel은 두 Coroutine 사이에 정보를 교환하는 전달 객체이다.
@@ -15,7 +13,8 @@ fun main() {
 //    channels()
 //    closingAndIterationOverChannels()
 //    buildingChannelProducers()
-    pipelines()
+//    pipelines()
+    primeNumbersWithPipeline()
 }
 
 /**
@@ -45,7 +44,7 @@ private fun closingAndIterationOverChannels() = runBlocking {
     launch {
         for (x in 1..5) channel.send(x * x)
         channel.close() // we're done sending
-     }
+    }
 
     // here we print received values using `for` loop (until the channel is closed)
     for (y in channel) println(y)
@@ -66,7 +65,6 @@ private fun buildingChannelProducers() = runBlocking {
 }
 
 
-
 /**
  * produce는 receive시에 쓰레드를 대기하여 값을 보장
  * */
@@ -82,3 +80,25 @@ private fun pipelines() = runBlocking {
     println("Done!") // we are done
     coroutineContext.cancelChildren() // cancel children coroutines
 }
+
+/**
+ * main thread에서 수행되기 때문에 cancelChildren을 통해서 10개만 골라내고 중지 합니다.
+ * */
+private fun primeNumbersWithPipeline() = runBlocking {
+    var cur = numbersFrom(2)
+
+    for (i in 1..10) {
+        val prime = cur.receive()
+        println(prime)
+        cur = filter(cur, prime)
+    }
+    coroutineContext.cancelChildren() // cancel all children to let main finish }
+}
+
+fun CoroutineScope.numbersFrom(start: Int) = produce {
+    var x = start
+    while (true) send(x++) // infinite stream of integers from start
+}
+
+fun CoroutineScope.filter(numbers: ReceiveChannel<Int>, prime: Int) =
+    produce { for (x in numbers) if (x % prime != 0) send(x) }
