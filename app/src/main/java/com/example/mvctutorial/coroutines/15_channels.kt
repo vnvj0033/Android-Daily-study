@@ -14,7 +14,7 @@ fun main() {
 //    closingAndIterationOverChannels()
 //    buildingChannelProducers()
 //    pipelines()
-    primeNumbersWithPipeline()
+    fanOut()
 }
 
 /**
@@ -66,7 +66,7 @@ private fun buildingChannelProducers() = runBlocking {
 
 
 /**
- * produce는 receive시에 쓰레드를 대기하여 값을 보장
+ * produce는 receive시에만 함수를 실행, 쓰레드를 대기하여 값을 보장
  * */
 private fun pipelines() = runBlocking {
     val numbers = produce {
@@ -82,23 +82,25 @@ private fun pipelines() = runBlocking {
 }
 
 /**
- * main thread에서 수행되기 때문에 cancelChildren을 통해서 10개만 골라내고 중지 합니다.
+ * coroutine이 하나의 channel에의 값을 receive
  * */
-private fun primeNumbersWithPipeline() = runBlocking {
-    var cur = numbersFrom(2)
-
-    for (i in 1..10) {
-        val prime = cur.receive()
-        println(prime)
-        cur = filter(cur, prime)
+private fun fanOut() = runBlocking {
+    val producer = produce {
+        var x = 1 // start from 1
+        while (true) {
+            send(x++) // produce next
+            delay(100) // wait 0.1s
+        }
     }
-    coroutineContext.cancelChildren() // cancel all children to let main finish }
-}
 
-fun CoroutineScope.numbersFrom(start: Int) = produce {
-    var x = start
-    while (true) send(x++) // infinite stream of integers from start
-}
+    repeat(5) {
+        launch {
+            for (msg in producer) {
+                println("Processor #$it received $msg")
+            }
+        }
 
-fun CoroutineScope.filter(numbers: ReceiveChannel<Int>, prime: Int) =
-    produce { for (x in numbers) if (x % prime != 0) send(x) }
+        delay(950)
+        producer.cancel() // cancel producer coroutine and thus kill them all
+    }
+}
