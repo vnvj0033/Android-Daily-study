@@ -14,6 +14,7 @@ fun main() {
 //    closingAndIterationOverChannels()
 //    buildingChannelProducers()
 //    pipelines()
+    fanOut()
 }
 
 /**
@@ -78,4 +79,28 @@ private fun pipelines() = runBlocking {
     for (i in 1..5) println(squares.receive()) // print first five
     println("Done!") // we are done
     coroutineContext.cancelChildren() // cancel children coroutines
+}
+
+/**
+ * coroutine이 하나의 channel에의 값을 receive
+ * */
+private fun fanOut() = runBlocking {
+    val producer = produce {
+        var x = 1 // start from 1
+        while (true) {
+            send(x++) // produce next
+            delay(100) // wait 0.1s
+        }
+    }
+
+    repeat(5) {
+        launch {
+            for (msg in producer) {
+                println("Processor #$it received $msg")
+            }
+        }
+
+        delay(950)
+        producer.cancel() // cancel producer coroutine and thus kill them all
+    }
 }
