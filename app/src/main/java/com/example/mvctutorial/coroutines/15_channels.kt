@@ -1,10 +1,7 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.channels.*
 
 /**
  * Channel은 두 Coroutine 사이에 정보를 교환하는 전달 객체이다.
@@ -85,22 +82,25 @@ private fun pipelines() = runBlocking {
  * coroutine이 하나의 channel에의 값을 receive
  * */
 private fun fanOut() = runBlocking {
-    val producer = produce {
-        var x = 1 // start from 1
-        while (true) {
-            send(x++) // produce next
-            delay(100) // wait 0.1s
-        }
-    }
+    val producer = produceNumbers()
 
     repeat(5) {
-        launch {
-            for (msg in producer) {
-                println("Processor #$it received $msg")
-            }
-        }
+        launchProcessor(it, producer)
+    }
+    delay(9500)
+    producer.cancel()
+}
 
-        delay(950)
-        producer.cancel() // cancel producer coroutine and thus kill them all
+private fun CoroutineScope.produceNumbers() = produce {
+    var x = 1 // start from 1
+    while (true) {
+        send(x++) // produce next
+        delay(100) // wait 0.1s
+    }
+}
+
+private fun CoroutineScope.launchProcessor(id: Int, channel: ReceiveChannel<Int>) = launch {
+    for (msg in channel) {
+        println("Processor #$id received $msg")
     }
 }
