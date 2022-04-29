@@ -11,7 +11,8 @@ fun main() {
 //    closingAndIterationOverChannels()
 //    buildingChannelProducers()
 //    pipelines()
-    fanOut()
+    primeNumbersWithPipeline()
+//    fanOut()
 }
 
 /**
@@ -77,6 +78,32 @@ private fun pipelines() = runBlocking {
     println("Done!") // we are done
     coroutineContext.cancelChildren() // cancel children coroutines
 }
+
+
+/**
+ * produce로 무한증가 함수에서 소수를 찾는 pipelining
+ * */
+private fun primeNumbersWithPipeline() = runBlocking {
+    var cur = numbersFrom(2)
+    for (i in 1..10) {
+        val prime = cur.receive()
+        println(prime)
+        cur = filter(cur, prime)
+    }
+    coroutineContext.cancelChildren() // cancel all children to let main finish
+}
+
+private fun CoroutineScope.numbersFrom(start: Int) = produce {
+    var x = start
+    while (true)
+        send(x++)// infinite stream of integers from start
+}
+
+private fun CoroutineScope.filter(numbers: ReceiveChannel<Int>, prime: Int) = produce {
+    for (x in numbers)
+        if (x % prime != 0) send(x)
+}
+
 
 /**
  * coroutine이 하나의 channel에의 값을 receive
