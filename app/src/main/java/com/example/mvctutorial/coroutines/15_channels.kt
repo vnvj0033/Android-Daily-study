@@ -11,8 +11,9 @@ fun main() {
 //    closingAndIterationOverChannels()
 //    buildingChannelProducers()
 //    pipelines()
-    primeNumbersWithPipeline()
+//    primeNumbersWithPipeline()
 //    fanOut()
+    fanIn()
 }
 
 /**
@@ -129,5 +130,25 @@ private fun CoroutineScope.produceNumbers() = produce {
 private fun CoroutineScope.launchProcessor(id: Int, channel: ReceiveChannel<Int>) = launch {
     for (msg in channel) {
         println("Processor #$id received $msg")
+    }
+}
+
+/**
+ * 하나의 channel에 여러개의 coroutine이 send
+ * */
+private fun fanIn() = runBlocking {
+    val channel = Channel<String>()
+    launch { sendString(channel, "foo", 200L) }
+    launch { sendString(channel, "BAR!", 500L) }
+    repeat(6) { // receive first six
+        println(channel.receive())
+    }
+    coroutineContext.cancelChildren() // cancel all children to let main finish
+}
+
+private suspend fun sendString(channel: SendChannel<String>, s: String, time: Long) {
+    while (true) {
+        delay(time)
+        channel.send(s)
     }
 }
