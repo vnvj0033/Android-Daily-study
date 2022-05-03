@@ -13,7 +13,8 @@ fun main() {
 //    pipelines()
 //    primeNumbersWithPipeline()
 //    fanOut()
-    fanIn()
+//    fanIn()
+    bufferedChannels()
 }
 
 /**
@@ -151,4 +152,26 @@ private suspend fun sendString(channel: SendChannel<String>, s: String, time: Lo
         delay(time)
         channel.send(s)
     }
+}
+
+/**
+ * Channel은 버퍼가 없어 send가 발생하면 receive 발생까지 suspend
+ * 버퍼를 지정하면 버퍼만큼 저장후 suspend
+ * */
+private fun bufferedChannels() = runBlocking {
+    val channel = Channel<Int>(4)
+    val sender = launch {
+        repeat(10) {
+            channel.send(it)
+            println("sending $it")
+        }
+    }
+
+    delay(1000)
+
+    channel.receive()
+    channel.receive()
+
+    delay(1000)
+    sender.cancel()
 }
