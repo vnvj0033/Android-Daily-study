@@ -14,6 +14,7 @@ fun main() {
  * 공유된 자원을 건드리기위한 multi thread 동시성을 제어할 필요가있다.
  * 코루틴의 특수성으로 인해 아래의 경우는 GlobalScope에서 실행 하였으나 동기를 보장 받지 못 함
  * */
+@Volatile
 var counter = 0
 private fun sharedMutableStateAndConcurrency() = runBlocking {
 
