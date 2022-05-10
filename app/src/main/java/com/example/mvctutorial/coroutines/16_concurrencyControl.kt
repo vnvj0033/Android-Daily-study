@@ -7,7 +7,8 @@ import kotlin.system.measureTimeMillis
 fun main() {
 //    sharedMutableStateAndConcurrency()
 //    thread_safeDataStructures()
-    threadConfinementFineGained()
+//    threadConfinementFineGained()
+    threadConfinementCoarse_gained()
 }
 
 /**
@@ -63,4 +64,15 @@ private fun threadConfinementFineGained() = runBlocking {
             counter++
         }
     }
+    println("Counter = $counter")
+}
+
+/**
+ * 코루틴 스코프에 컨텍스트를 주입하여 작업 각기 다른 쓰레드에서 시작하는 작업의 동기를 맞춤
+ * */
+private fun threadConfinementCoarse_gained() = runBlocking {
+    CoroutineScope(coroutineContext).massiveRun {
+        counter++
+    }
+    println("Counter = $counter")
 }
