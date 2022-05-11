@@ -1,6 +1,8 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.system.measureTimeMillis
 
@@ -8,7 +10,8 @@ fun main() {
 //    sharedMutableStateAndConcurrency()
 //    thread_safeDataStructures()
 //    threadConfinementFineGained()
-    threadConfinementCoarse_gained()
+//    threadConfinementCoarse_gained()
+    mutualExclusion()
 }
 
 /**
@@ -75,4 +78,20 @@ private fun threadConfinementCoarse_gained() = runBlocking {
         counter++
     }
     println("Counter = $counter")
+}
+
+/**
+ * 동기화 문제를 상호 배제를 통해 해결가능, 코루틴에서는 Mutex의 lock, unlock으로 가능
+ * 이를 간단하게 withLock(action: () -> T)으로 사용 가능
+ * */
+var mutexCounter = 0
+val mutex = Mutex()
+
+private fun mutualExclusion() = runBlocking {
+    GlobalScope.massiveRun {
+        mutex.withLock {
+            mutexCounter++
+        }
+    }
+    println("Counter = $mutexCounter")
 }
