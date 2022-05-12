@@ -1,6 +1,7 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicInteger
@@ -11,7 +12,8 @@ fun main() {
 //    thread_safeDataStructures()
 //    threadConfinementFineGained()
 //    threadConfinementCoarse_gained()
-    mutualExclusion()
+//    mutualExclusion()
+    actors()
 }
 
 /**
@@ -94,4 +96,36 @@ private fun mutualExclusion() = runBlocking {
         }
     }
     println("Counter = $mutexCounter")
+}
+
+
+/**
+ * actor을 사용하면 channel을 통해 외부 코루틴과 작용하고 send receive형태로 작동,
+ * Thread Handler와 비슷한 구조 동작
+ * */
+// Message types for counterActor
+private sealed class CounterMsg
+private object IncCounter : CounterMsg() // one-way message to increment counter
+private class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg() // a request with reply
+
+private fun actors() = runBlocking {
+    val counter = actor<CounterMsg> { // create the actor
+        var counter = 0 // actor state
+        for (msg in channel) { // iterate over incoming messages
+            when (msg) {
+                is IncCounter -> counter++
+                is GetCounter -> msg.response.complete(counter)
+            }
+        }
+    }
+    GlobalScope.massiveRun {
+        counter.send(IncCounter)
+    }
+
+// send a message to get a counter value from an actor
+    val response = CompletableDeferred<Int>()
+    counter.send(GetCounter(response))
+    println("Counter = ${response.await()}")
+    counter.close() // shutdown the actor
+
 }
