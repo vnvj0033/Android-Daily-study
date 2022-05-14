@@ -1,10 +1,16 @@
 package com.example.mvctutorial.coroutines
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun main() {
 //    representingMultipleValues()
-    sequences()
+//    sequences()
+    asynchronousFlow()
 }
 
 /**
@@ -29,4 +35,31 @@ private fun sequences() = runBlocking {
     }
 
     foo().forEach { println(it) }
+}
+
+/**
+ * Flow는 flow {}, 빌더를 사용해 생성하며 빌더중 코드는 언제든 중단이 가능함
+ * 값은 emit를 사용해 배출하며 collect를 통해 방출
+ * */
+private fun asynchronousFlow() = runBlocking {
+
+    fun foo(): Flow<Int> = flow { // flow builder
+        for (i in 1..3) {
+            delay(100) // pretend we are doing something useful here
+            emit(i) // emit next value
+        }
+    }
+
+    println("main start!")
+    launch {
+        for (k in 1..3) {
+            println("I'm not blocked $k")
+            delay (100)
+        }
+    }
+
+    foo().collect { println(it) }
+    println ("main end!")
+
+
 }
