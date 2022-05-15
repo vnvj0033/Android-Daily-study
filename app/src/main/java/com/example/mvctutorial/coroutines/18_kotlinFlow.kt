@@ -10,7 +10,8 @@ import kotlinx.coroutines.runBlocking
 fun main() {
 //    representingMultipleValues()
 //    sequences()
-    asynchronousFlow()
+//    asynchronousFlow()
+    flowsAreCold()
 }
 
 /**
@@ -60,6 +61,28 @@ private fun asynchronousFlow() = runBlocking {
 
     foo().collect { println(it) }
     println ("main end!")
+}
+
+/**
+ * Flow는 sequence 처럼 cold stream으로 collect가 실행 되기 전까지 대기한다.
+ * */
+private fun flowsAreCold() = runBlocking {
+
+    fun foo(): Flow<Int> = flow {
+        println("Flow started")
+        for (i in 1..3) {
+            delay(100)
+            emit(i)
+        }
+    }
 
 
+    println("Calling foo...")
+    val flow = foo()
+
+    println("Calling collect...")
+    flow.collect { println(it) }
+
+    println("Calling collect again...")
+    flow.collect { println(it) }
 }
