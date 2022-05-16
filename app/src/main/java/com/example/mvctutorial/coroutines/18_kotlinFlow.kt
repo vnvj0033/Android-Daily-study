@@ -2,16 +2,19 @@ package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 
 fun main() {
 //    representingMultipleValues()
 //    sequences()
 //    asynchronousFlow()
-    flowsAreCold()
+//    flowsAreCold()
+    flowCancellation()
 }
 
 /**
@@ -85,4 +88,34 @@ private fun flowsAreCold() = runBlocking {
 
     println("Calling collect again...")
     flow.collect { println(it) }
+}
+
+/**
+ * flow 자체에는 cancel 함수를 지원하지 않아
+ * 아래와 같이 타이머로 종료시키거나 launch로 감싸서 취소
+ * */
+private fun flowCancellation() = runBlocking {
+    fun flow() = flow {
+        for (i in 1..3) {
+            delay(100)
+            emit(i)
+        }
+    }
+
+    val flow1 = flow()
+    val flow2 = flow()
+
+
+    withTimeoutOrNull(250) { // Timeout after 250ms
+        flow1.collect { println("Emitting $it") }
+    }
+    println("flow1 Done")
+
+
+    val fooLaunch = launch { // Timeout after 250ms
+         flow2.collect { println("Emitting $it") }
+    }
+    delay(250)
+    fooLaunch.cancel()
+    println("flow2 Done")
 }
