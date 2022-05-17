@@ -1,10 +1,7 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
@@ -14,7 +11,8 @@ fun main() {
 //    sequences()
 //    asynchronousFlow()
 //    flowsAreCold()
-    flowCancellation()
+//    flowCancellation()
+    flowBuilders()
 }
 
 /**
@@ -118,4 +116,20 @@ private fun flowCancellation() = runBlocking {
     delay(250)
     fooLaunch.cancel()
     println("flow2 Done")
+}
+
+/**
+ * flow{...}를 이용해서 flow를 만드는건 가장 기본적인 방법
+ * 값이 고정되어 있을경우 flowOf
+ * 다양한 Collection들을 .asFlow() extension function으로 flow로 변경
+ * */
+private fun flowBuilders() = runBlocking {
+    println("main start!")
+
+    val flow1 = flowOf(1, 2, 3)
+    flow1.collect { println("flow1:$it") }
+
+    println("/////////////////") // Convert an integer range to a flow
+    (1..3).asFlow().collect { println("flow2:$it") }
+    println("main end!")
 }
