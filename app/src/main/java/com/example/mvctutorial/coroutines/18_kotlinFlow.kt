@@ -12,7 +12,8 @@ fun main() {
 //    asynchronousFlow()
 //    flowsAreCold()
 //    flowCancellation()
-    flowBuilders()
+//    flowBuilders()
+    intermediateFlowOperators()
 }
 
 /**
@@ -132,4 +133,18 @@ private fun flowBuilders() = runBlocking {
     println("/////////////////") // Convert an integer range to a flow
     (1..3).asFlow().collect { println("flow2:$it") }
     println("main end!")
+}
+
+/**
+ * flow에서 사용되는 map이나 filter의 블럭 안에서 delay 같은 suspending function을 사용 가능
+ * */
+private fun intermediateFlowOperators() = runBlocking {
+    (1..3).asFlow() // a flow of requests
+        .map { request -> performRequest(request) }
+        .collect { response -> println(response) }
+}
+
+suspend fun performRequest(request: Int): String {
+    delay(1000) // imitate long-running asynchronous work
+    return "response $request"
 }
