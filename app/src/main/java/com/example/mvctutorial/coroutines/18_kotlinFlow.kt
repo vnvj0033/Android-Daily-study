@@ -13,7 +13,8 @@ fun main() {
 //    flowsAreCold()
 //    flowCancellation()
 //    flowBuilders()
-    intermediateFlowOperators()
+//    intermediateFlowOperators()
+    transformOperator()
 }
 
 /**
@@ -57,12 +58,12 @@ private fun asynchronousFlow() = runBlocking {
     launch {
         for (k in 1..3) {
             println("I'm not blocked $k")
-            delay (100)
+            delay(100)
         }
     }
 
     foo().collect { println(it) }
-    println ("main end!")
+    println("main end!")
 }
 
 /**
@@ -112,7 +113,7 @@ private fun flowCancellation() = runBlocking {
 
 
     val fooLaunch = launch { // Timeout after 250ms
-         flow2.collect { println("Emitting $it") }
+        flow2.collect { println("Emitting $it") }
     }
     delay(250)
     fooLaunch.cancel()
@@ -147,4 +148,16 @@ private fun intermediateFlowOperators() = runBlocking {
 suspend fun performRequest(request: Int): String {
     delay(1000) // imitate long-running asynchronous work
     return "response $request"
+}
+
+/**
+ * transform은 map 이나 filter처럼 간단하게 값들을 변환할 수 도 있고, 복잡한 변환을 수행하도록 할수도 있음
+ * */
+private fun transformOperator() = runBlocking {
+    (1..3).asFlow() // a flow of requests
+        .transform { request ->
+            emit("Making request $request")
+            emit (performRequest(request))
+        }
+        .collect { response -> println(response) }
 }
