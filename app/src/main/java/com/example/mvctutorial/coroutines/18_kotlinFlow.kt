@@ -14,7 +14,8 @@ fun main() {
 //    flowCancellation()
 //    flowBuilders()
 //    intermediateFlowOperators()
-    transformOperator()
+//    transformOperator()
+    sizeLimitingOperators()
 }
 
 /**
@@ -160,4 +161,24 @@ private fun transformOperator() = runBlocking {
             emit (performRequest(request))
         }
         .collect { response -> println(response) }
+}
+
+/**
+ * 몇개의 값만 처리가 필요한 경우 take를 통하여 개수를 제한
+ * take는 제한된 개수까지만 flow를 수행하고 그 이후에는 cancel
+ * finally를 사용해 리소스를 관리할 수 있음
+ * */
+private fun sizeLimitingOperators() = runBlocking {
+    val numbers = flow {
+        try {
+            emit(1)
+            emit(2)
+            println("This line will not execute")
+            emit(3)
+        } finally {
+            println("Finally in numbers")
+        }
+    }
+
+    numbers.take(2).collect{ println(it) }
 }
