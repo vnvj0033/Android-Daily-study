@@ -15,7 +15,8 @@ fun main() {
 //    flowBuilders()
 //    intermediateFlowOperators()
 //    transformOperator()
-    sizeLimitingOperators()
+//    sizeLimitingOperators()
+    terminalFlowOperators()
 }
 
 /**
@@ -158,7 +159,7 @@ private fun transformOperator() = runBlocking {
     (1..3).asFlow() // a flow of requests
         .transform { request ->
             emit("Making request $request")
-            emit (performRequest(request))
+            emit(performRequest(request))
         }
         .collect { response -> println(response) }
 }
@@ -180,5 +181,20 @@ private fun sizeLimitingOperators() = runBlocking {
         }
     }
 
-    numbers.take(2).collect{ println(it) }
+    numbers.take(2).collect { println(it) }
+}
+
+
+/**
+ * flow는 다양한 collection 을 지원
+ * toList 또는 toSet : flow를 MutableList나 MutableSet으로 변환
+ * first: 첫번째 원소를 반환하고 나머지는 cancel 시킴
+ * reduce: 첫번째 원소에 주어진 operation을 이용하여 누적시켜 최종값을 반환
+ * fold: 초기값을 입력받아 주어진 operation을 이용하여 누적시켜 최종값을 반환
+ * */
+private fun terminalFlowOperators() = runBlocking {
+    val sum = (1..5).asFlow()
+        .map { it * it } // squares of numbers from 1 to 5
+        .reduce { a, b -> a + b } // sum them (terminal operator)
+    println(sum)
 }
