@@ -11,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MVCTutorial">
         <activity
+            android:name=".ComposeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_compose"
+            android:theme="@style/Theme.MVCTutorial" />
+        <activity
             android:name=".network.RetrofitActivity"
             android:exported="false" />
         <activity
