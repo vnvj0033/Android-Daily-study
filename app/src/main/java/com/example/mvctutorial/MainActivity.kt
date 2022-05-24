@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.mvctutorial.compose.ComposeActivity
 import com.example.mvctutorial.databinding.ActivityMainBinding
 import com.example.mvctutorial.homecontent.BannerActivity
 import com.example.mvctutorial.navigate.NavigateActivity
@@ -42,4 +43,8 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    val composeClick = View.OnClickListener {
+        val intent = Intent(this, ComposeActivity::class.java)
+        startActivity(intent)
+    }
 }
