@@ -16,7 +16,8 @@ fun main() {
 //    intermediateFlowOperators()
 //    transformOperator()
 //    sizeLimitingOperators()
-    terminalFlowOperators()
+//    terminalFlowOperators()
+    flowsAreSequential()
 }
 
 /**
@@ -197,4 +198,20 @@ private fun terminalFlowOperators() = runBlocking {
         .map { it * it } // squares of numbers from 1 to 5
         .reduce { a, b -> a + b } // sum them (terminal operator)
     println(sum)
+}
+
+/**
+ * 각각의 colection으로 이루어진 flow들은 순차적으로(sequential)하게 동작
+ * */
+private fun flowsAreSequential() = runBlocking {
+    (1..5).asFlow()
+        .filter {
+            println("Filter $it")
+            it % 2 == 0
+        }.map {
+            println("Map $it")
+            "string $it"
+        }.collect {
+            println("Collect $it")
+        }
 }
