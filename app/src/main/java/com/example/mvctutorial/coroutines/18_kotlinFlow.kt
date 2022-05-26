@@ -17,7 +17,8 @@ fun main() {
 //    transformOperator()
 //    sizeLimitingOperators()
 //    terminalFlowOperators()
-    flowsAreSequential()
+//    flowsAreSequential()
+    flowContext()
 }
 
 /**
@@ -214,4 +215,19 @@ private fun flowsAreSequential() = runBlocking {
         }.collect {
             println("Collect $it")
         }
+}
+
+/**
+ * flow로 만들어진 collection은 이를 호출한 caller의 coroutine context에서 수행되며
+ * 이를 context preservation(context 보존)이라함
+ * */
+private fun flowContext() = runBlocking {
+    val foo = flow {
+        println("[${Thread.currentThread().name}] Started foo flow")
+        for (i in 1..3) {
+            emit(i)
+        }
+    }
+
+    foo.collect { println("[${Thread.currentThread().name}] Collected $it") }
 }
