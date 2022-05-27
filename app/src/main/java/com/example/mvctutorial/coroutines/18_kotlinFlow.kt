@@ -1,10 +1,7 @@
 package com.example.mvctutorial.coroutines
 
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeoutOrNull
 
 fun main() {
 //    representingMultipleValues()
@@ -18,7 +15,8 @@ fun main() {
 //    sizeLimitingOperators()
 //    terminalFlowOperators()
 //    flowsAreSequential()
-    flowContext()
+//    flowContext()
+    flowOnOperator()
 }
 
 /**
@@ -230,4 +228,24 @@ private fun flowContext() = runBlocking {
     }
 
     foo.collect { println("[${Thread.currentThread().name}] Collected $it") }
+}
+
+
+/**
+ * background thread에서 수행하고, 결과를 받는 작업은 main thread에서 처리할 경우
+ * withContext가 아니라 flowOn 을 이용하여 context를 바꿔줄 수 있음
+ * */
+private fun flowOnOperator() = runBlocking {
+    @Suppress("BlockingMethodInNonBlockingContext")
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            Thread.sleep(100) // pretend we are computing it in CPU-consuming way
+            println("[${Thread.currentThread().name}] Emitting $i")
+            emit(i) // emit next value
+        }
+    }.flowOn(Dispatchers.Default) // RIGHT way to change context for CPU-consuming code in flow builder
+
+    println("main start!")
+    foo.collect { println("[${Thread.currentThread().name}] Collected $it")  }
+    println("main end!")
 }
