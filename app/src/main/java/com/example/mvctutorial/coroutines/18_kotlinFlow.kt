@@ -2,6 +2,7 @@ package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlin.system.measureTimeMillis
 
 fun main() {
 //    representingMultipleValues()
@@ -16,7 +17,8 @@ fun main() {
 //    terminalFlowOperators()
 //    flowsAreSequential()
 //    flowContext()
-    flowOnOperator()
+//    flowOnOperator()
+    buffering()
 }
 
 /**
@@ -248,4 +250,25 @@ private fun flowOnOperator() = runBlocking {
     println("main start!")
     foo.collect { println("[${Thread.currentThread().name}] Collected $it")  }
     println("main end!")
+}
+
+
+/**
+ * emit() 하는 부분에 buffer를 만들고 순차적인 처리가 아닌 pipelining을 통해 동시에 동작하도록 하여 시간을 감소
+ * */
+private fun buffering() = runBlocking {
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            delay(100) // pretend we are asynchronously waiting 100 ms
+            emit(i) // emit next value
+        }
+    }
+
+    val time = measureTimeMillis {
+        foo.buffer().collect { value ->
+            delay(300) // pretend we are processing it for 300 ms
+            println(value)
+        }
+    }
+    println("Collected in $time ms")
 }
