@@ -18,7 +18,8 @@ fun main() {
 //    flowsAreSequential()
 //    flowContext()
 //    flowOnOperator()
-    buffering()
+//    buffering()
+    conflation()
 }
 
 /**
@@ -269,6 +270,34 @@ private fun buffering() = runBlocking {
             delay(300) // pretend we are processing it for 300 ms
             println(value)
         }
+    }
+    println("Collected in $time ms")
+}
+
+/**
+ * conflate operator를 사용하여 중간값은 skip하도록 구현
+ * 값을 처리하는 시점에 emit되어 쌓여있는 중간 값은 모두 버리고 마지막 값만 취함
+ * */
+private fun conflation() = runBlocking {
+
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            delay(100) // pretend we are asynchronously waiting 100 ms
+            emit(i) // emit next value
+            println("emit $i")
+        }
+    }
+
+    val time = measureTimeMillis {
+        foo.conflate()
+            .collect { value ->
+                try {
+                    delay(300) // pretend we are processing it for 300 ms
+                    println("Done $value")
+                } catch (ce: CancellationException) {
+                    println("Cancelled $value")
+                }
+            }
     }
     println("Collected in $time ms")
 }
