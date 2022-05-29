@@ -101,3 +101,4 @@ lint/tmp/
 # lint/reports/
 
 /.idea/inspectionProfiles/Project_Default.xml
+/.idea/misc.xml
