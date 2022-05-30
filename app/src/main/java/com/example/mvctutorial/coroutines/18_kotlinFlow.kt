@@ -28,6 +28,9 @@ fun main() {
 private fun representingMultipleValues() = runBlocking {
     listOf(1, 2, 3).forEach { value -> println(value) }
 }
+// 1
+// 2
+// 3
 
 
 /**
@@ -36,15 +39,18 @@ private fun representingMultipleValues() = runBlocking {
  * */
 private fun sequences() = runBlocking {
 
-    fun foo(): Sequence<Int> = sequence { // sequence builder
+    val foo: Sequence<Int> = sequence { // sequence builder
         for (i in 1..3) {
             Thread.sleep(1000) // pretend we are computing it
             yield(i) // yield next value
         }
     }
 
-    foo().forEach { println(it) }
+    foo.forEach { println(it) }
 }
+// 1
+// 2
+// 3
 
 /**
  * Flow는 flow {}, 빌더를 사용해 생성하며 빌더중 코드는 언제든 중단이 가능함
@@ -52,9 +58,10 @@ private fun sequences() = runBlocking {
  * */
 private fun asynchronousFlow() = runBlocking {
 
-    fun foo(): Flow<Int> = flow { // flow builder
+    val foo: Flow<Int> = flow { // flow builder
+        delay(100)
         for (i in 1..3) {
-            delay(100) // pretend we are doing something useful here
+            delay(1000) // pretend we are doing something useful here
             emit(i) // emit next value
         }
     }
@@ -62,68 +69,92 @@ private fun asynchronousFlow() = runBlocking {
     println("main start!")
     launch {
         for (k in 1..3) {
+            delay(1000)
             println("I'm not blocked $k")
-            delay(100)
         }
     }
 
-    foo().collect { println(it) }
+    foo.collect { println(it) }
     println("main end!")
 }
+/*
+main start!
+I'm not blocked 1
+1
+I'm not blocked 2
+2
+I'm not blocked 3
+3
+main end!
+ */
+
 
 /**
- * Flow는 sequence 처럼 cold stream으로 collect가 실행 되기 전까지 대기한다.
+ * Flow는 sequence 처럼 cold stream이다
+ * collect가 실행 되기 전까지 대기한다.
+ * collect가 다시 호출되면 초기화 실행
  * */
 private fun flowsAreCold() = runBlocking {
 
-    fun foo(): Flow<Int> = flow {
-        println("Flow started")
+    val foo: Flow<Int> = flow {
         for (i in 1..3) {
             delay(100)
             emit(i)
         }
     }
 
-
-    println("Calling foo...")
-    val flow = foo()
-
     println("Calling collect...")
-    flow.collect { println(it) }
+    foo.collect { println(it) }
 
     println("Calling collect again...")
-    flow.collect { println(it) }
+    foo.collect { println(it) }
 }
+/*
+Calling collect...
+1
+2
+3
+Calling collect again...
+1
+2
+3
+*/
+
 
 /**
  * flow 자체에는 cancel 함수를 지원하지 않아
  * 아래와 같이 타이머로 종료시키거나 launch로 감싸서 취소
  * */
 private fun flowCancellation() = runBlocking {
-    fun flow() = flow {
+    val flow = flow {
         for (i in 1..3) {
             delay(100)
             emit(i)
         }
     }
 
-    val flow1 = flow()
-    val flow2 = flow()
-
-
     withTimeoutOrNull(250) { // Timeout after 250ms
-        flow1.collect { println("Emitting $it") }
+        flow.collect { println("Emitting $it") }
     }
     println("flow1 Done")
 
 
-    val fooLaunch = launch { // Timeout after 250ms
-        flow2.collect { println("Emitting $it") }
+    val job = launch { // Timeout after 250ms
+        flow.collect { println("Emitting $it") }
     }
     delay(250)
-    fooLaunch.cancel()
+    job.cancel()
     println("flow2 Done")
 }
+/*
+Emitting 1
+Emitting 2
+flow1 Done
+Emitting 1
+Emitting 2
+flow2 Done
+ */
+
 
 /**
  * flow{...}를 이용해서 flow를 만드는건 가장 기본적인 방법
@@ -133,19 +164,31 @@ private fun flowCancellation() = runBlocking {
 private fun flowBuilders() = runBlocking {
     println("main start!")
 
-    val flow1 = flowOf(1, 2, 3)
-    flow1.collect { println("flow1:$it") }
+    val flow = flowOf(1, 2, 3)
+    flow.collect { println("flow : $it") }
 
-    println("/////////////////") // Convert an integer range to a flow
-    (1..3).asFlow().collect { println("flow2:$it") }
+    println("") // Convert an integer range to a flow
+    (1..3).asFlow().collect { println("flow : $it") }
     println("main end!")
 }
+/*
+main start!
+flow : 1
+flow : 2
+flow : 3
+
+flow : 1
+flow : 2
+flow : 3
+main end!
+ */
+
 
 /**
  * flow에서 사용되는 map이나 filter의 블럭 안에서 delay 같은 suspending function을 사용 가능
  * */
 private fun intermediateFlowOperators() = runBlocking {
-    (1..3).asFlow() // a flow of requests
+    (1..3).asFlow()
         .map { request -> performRequest(request) }
         .collect { response -> println(response) }
 }
@@ -154,18 +197,33 @@ suspend fun performRequest(request: Int): String {
     delay(1000) // imitate long-running asynchronous work
     return "response $request"
 }
+/*
+response 1
+response 2
+response 3
+ */
+
 
 /**
  * transform은 map 이나 filter처럼 간단하게 값들을 변환할 수 도 있고, 복잡한 변환을 수행하도록 할수도 있음
  * */
 private fun transformOperator() = runBlocking {
-    (1..3).asFlow() // a flow of requests
+    (1..3).asFlow()
         .transform { request ->
             emit("Making request $request")
             emit(performRequest(request))
         }
         .collect { response -> println(response) }
 }
+/*
+Making request 1
+response 1
+Making request 2
+response 2
+Making request 3
+response 3
+ */
+
 
 /**
  * 몇개의 값만 처리가 필요한 경우 take를 통하여 개수를 제한
@@ -186,6 +244,11 @@ private fun sizeLimitingOperators() = runBlocking {
 
     numbers.take(2).collect { println(it) }
 }
+/*
+1
+2
+Finally in numbers
+ */
 
 
 /**
@@ -201,6 +264,10 @@ private fun terminalFlowOperators() = runBlocking {
         .reduce { a, b -> a + b } // sum them (terminal operator)
     println(sum)
 }
+/*
+55
+ */
+
 
 /**
  * 각각의 colection으로 이루어진 flow들은 순차적으로(sequential)하게 동작
@@ -217,6 +284,18 @@ private fun flowsAreSequential() = runBlocking {
             println("Collect $it")
         }
 }
+/*
+Filter 1
+Filter 2
+Map 2
+Collect string 2
+Filter 3
+Filter 4
+Map 4
+Collect string 4
+Filter 5
+ */
+
 
 /**
  * flow로 만들어진 collection은 이를 호출한 caller의 coroutine context에서 수행되며
@@ -224,14 +303,27 @@ private fun flowsAreSequential() = runBlocking {
  * */
 private fun flowContext() = runBlocking {
     val foo = flow {
-        println("[${Thread.currentThread().name}] Started foo flow")
-        for (i in 1..3) {
-            emit(i)
-        }
+        emit(Thread.currentThread().name)
     }
 
-    foo.collect { println("[${Thread.currentThread().name}] Collected $it") }
+    foo.collect {
+        println("start thread : [$it]")
+        println("Collect thread : [${Thread.currentThread().name}]")
+    }
+
+    launch(Dispatchers.IO) {
+        foo.collect {
+            println("start thread : [$it]")
+            println("Collect thread : [${Thread.currentThread().name}]")
+        }
+    }
 }
+/*
+start thread : [main]
+Collect thread : [main]
+start thread : [DefaultDispatcher-worker-1]
+Collect thread : [DefaultDispatcher-worker-1]
+ */
 
 
 /**
@@ -239,19 +331,20 @@ private fun flowContext() = runBlocking {
  * withContext가 아니라 flowOn 을 이용하여 context를 바꿔줄 수 있음
  * */
 private fun flowOnOperator() = runBlocking {
-    @Suppress("BlockingMethodInNonBlockingContext")
-    val foo: Flow<Int> = flow {
-        for (i in 1..3) {
-            Thread.sleep(100) // pretend we are computing it in CPU-consuming way
-            println("[${Thread.currentThread().name}] Emitting $i")
-            emit(i) // emit next value
-        }
+
+    val foo = flow {
+        emit(Thread.currentThread().name)
     }.flowOn(Dispatchers.Default) // RIGHT way to change context for CPU-consuming code in flow builder
 
-    println("main start!")
-    foo.collect { println("[${Thread.currentThread().name}] Collected $it")  }
-    println("main end!")
+    foo.collect {
+        println("start thread : [$it]")
+        println("Collect thread : [${Thread.currentThread().name}]")
+    }
 }
+/*
+start thread : [DefaultDispatcher-worker-1]
+Collect thread : [main]
+ */
 
 
 /**
@@ -260,19 +353,26 @@ private fun flowOnOperator() = runBlocking {
 private fun buffering() = runBlocking {
     val foo: Flow<Int> = flow {
         for (i in 1..3) {
-            delay(100) // pretend we are asynchronously waiting 100 ms
+            delay(1000) // pretend we are asynchronously waiting 1000 ms
             emit(i) // emit next value
         }
     }
 
     val time = measureTimeMillis {
         foo.buffer().collect { value ->
-            delay(300) // pretend we are processing it for 300 ms
+            delay(100) // pretend we are processing it for 100 ms
             println(value)
         }
     }
     println("Collected in $time ms")
 }
+/*
+1
+2
+3
+Collected in 3150 ms
+ */
+
 
 /**
  * conflate operator를 사용하여 중간값은 skip하도록 구현
@@ -301,3 +401,11 @@ private fun conflation() = runBlocking {
     }
     println("Collected in $time ms")
 }
+/*
+emit 1
+emit 2
+emit 3
+Done 1
+Done 3
+Collected in 753 ms
+ */
