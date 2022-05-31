@@ -19,7 +19,8 @@ fun main() {
 //    flowContext()
 //    flowOnOperator()
 //    buffering()
-    conflation()
+//    conflation()
+    processingTheLatestValue()
 }
 
 /**
@@ -408,4 +409,42 @@ emit 3
 Done 1
 Done 3
 Collected in 753 ms
+ */
+
+
+/**
+ * collectLatest:
+ * collector가 flow를 처리하기 전에 다른 값을 전달 받으면 이전 collector를 취소하고 새로 전달받은 값을 처리하도록 재시작
+ * CancellationException으로 취소 catch해 처리 가능
+ * */
+private fun processingTheLatestValue() = runBlocking {
+
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            delay(100) // pretend we are asynchronously waiting 100 ms
+            emit(i) // emit next value
+        }
+    }
+
+    val time = measureTimeMillis {
+        foo.collectLatest { value ->
+            try {
+                println("collect $value")
+                delay(300) // pretend we are processing it for 300 ms
+                println("Done $value")
+            } catch (ce: CancellationException) {
+                println("Cancelled $value")
+            }
+        }
+    }
+    println("Collected in $time ms")
+}
+/*
+collect 1
+Cancelled 1
+collect 2
+Cancelled 2
+collect 3
+Done 3
+Collected in 649 ms
  */
