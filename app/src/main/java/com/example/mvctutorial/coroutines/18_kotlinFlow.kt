@@ -20,7 +20,8 @@ fun main() {
 //    flowOnOperator()
 //    buffering()
 //    conflation()
-    processingTheLatestValue()
+//    processingTheLatestValue()
+    zip()
 }
 
 /**
@@ -447,4 +448,21 @@ Cancelled 2
 collect 3
 Done 3
 Collected in 649 ms
+ */
+
+
+
+/**
+ * zip은 두개의 flow를 병합하는 작업을 제공
+ * */
+private fun zip() = runBlocking {
+    val nums = (1..3).asFlow() // numbers 1..3
+    val strs = flowOf("one", "two", "three") // strings
+    nums.zip(strs) { a, b -> "$a -> $b" } // compose a single string
+        .collect { println(it) } // collect and print
+}
+/*
+1 -> one
+2 -> two
+3 -> three
  */
