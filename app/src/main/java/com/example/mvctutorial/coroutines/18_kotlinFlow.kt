@@ -22,7 +22,8 @@ fun main() {
 //    conflation()
 //    processingTheLatestValue()
 //    zip()
-    combine()
+//    combine()
+    combine2()
 }
 
 /**
@@ -473,7 +474,7 @@ private fun zip() = runBlocking {
 
 /**
  * combine은 두개의 flow를 병합하는 작업을 제공
- * emit이 일어날 때마다 collect를 호출
+ * emit이 일어날 때마다 collect를 호출, 단 병합 flow 모두 하나의 방출값은 있어야 한다.
  * */
 private fun combine() = runBlocking {
     val nums = (1..3).asFlow().onEach { delay(300) } // numbers 1..3 every 300 ms
@@ -490,4 +491,20 @@ private fun combine() = runBlocking {
 2 -> two at 837 ms from start
 3 -> two at 939 ms from start
 3 -> three at 1240 ms from start
+ */
+
+private fun combine2() = runBlocking {
+    val nums = (1..3).asFlow().onEach { delay(100) } // numbers 1..3 every 300 ms
+    val strs = flowOf("one", "two", "three", "four").onEach { delay(400) } // strings every 400 ms
+    val startTime = System.currentTimeMillis() // remember the start time
+    nums.combine(strs) { a, b -> "$a -> $b" } // compose a single string with "zip"
+        .collect { value -> // collect and print
+            println("$value at ${System.currentTimeMillis() - startTime} ms from start")
+        }
+}
+/*
+3 -> one at 456 ms from start
+3 -> two at 863 ms from start
+3 -> three at 1265 ms from start
+3 -> four at 1669 ms from start
  */
