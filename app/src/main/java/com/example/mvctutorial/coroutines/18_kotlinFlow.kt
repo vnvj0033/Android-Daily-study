@@ -24,7 +24,8 @@ fun main() {
 //    zip()
 //    combine()
 //    combine2()
-    flatMapConcat()
+//    flatMapConcat()
+    flatMapMerge()
 }
 
 /**
@@ -513,6 +514,7 @@ private fun combine2() = runBlocking {
 
 /**
  * flatMapConcat은 flow를 연결하는 연산자이다.
+ * 외부 flow의 순서를 보장한다.
  * */
 private fun flatMapConcat() = runBlocking {
     fun requestFlow(i: Int): Flow<String> = flow {
@@ -535,4 +537,32 @@ private fun flatMapConcat() = runBlocking {
 2: Second at 1233 ms from start
 3: First at 1335 ms from start
 3: Second at 1840 ms from start
+ */
+
+/**
+ * flatMapMerge 역시 flow를 연결한다.
+ * 단 외부 flow의 순서를 보장하지 않고 먼저 emit된 값을 전달한다.
+ * */
+private fun flatMapMerge() = runBlocking {
+
+    fun requestFlow(i: Int): Flow<String> = flow {
+        emit("$i: First")
+        delay(500) // wait 500 ms
+        emit("$i: Second")
+    }
+
+    val startTime = System.currentTimeMillis() // remember the start time
+    (1..3).asFlow().onEach { delay(100) } // a number every 100 ms
+        .flatMapMerge { requestFlow(it) }
+        .collect { value -> // collect and print
+            println("$value at ${System.currentTimeMillis() - startTime} ms from start")
+        }
+}
+/*
+1: First at 188 ms from start
+2: First at 272 ms from start
+3: First at 377 ms from start
+1: Second at 688 ms from start
+2: Second at 773 ms from start
+3: Second at 880 ms from start
  */
