@@ -25,7 +25,8 @@ fun main() {
 //    combine()
 //    combine2()
 //    flatMapConcat()
-    flatMapMerge()
+//    flatMapMerge()
+    flatMapLatest()
 }
 
 /**
@@ -565,4 +566,30 @@ private fun flatMapMerge() = runBlocking {
 1: Second at 688 ms from start
 2: Second at 773 ms from start
 3: Second at 880 ms from start
+ */
+
+
+/**
+ * flow에서 emit 발생시 이전에 대기중이거나 동작중인 flow는 cancel
+ * requestFlow의 작업이 길어 second가 cancel됨을 볼 수 있다.
+ * */
+private fun flatMapLatest() = runBlocking {
+    fun requestFlow(i: Int) = flow {
+        emit("$i: First")
+        delay(500) // wait 500 ms
+        emit("$i: Second")
+    }
+
+    val startTime = System.currentTimeMillis() // remember the start time
+    (1..3).asFlow().onEach { delay(100) } // a number every 100 ms
+        .flatMapLatest { requestFlow(it) }
+        .collect { value -> // collect and print
+            println("$value at ${System.currentTimeMillis() - startTime} ms from start")
+        }
+}
+/*
+1: First at 162 ms from start
+2: First at 272 ms from start
+3: First at 373 ms from start
+3: Second at 875 ms from start
  */
