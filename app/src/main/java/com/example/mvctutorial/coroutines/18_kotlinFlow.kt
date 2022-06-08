@@ -575,9 +575,13 @@ private fun flatMapMerge() = runBlocking {
  * */
 private fun flatMapLatest() = runBlocking {
     fun requestFlow(i: Int) = flow {
-        emit("$i: First")
-        delay(500) // wait 500 ms
-        emit("$i: Second")
+        try {
+            emit("$i: First")
+            delay(500) // wait 500 ms
+            emit("$i: Second")
+        } catch (ce: CancellationException) {
+            println("cancelled!!")
+        }
     }
 
     val startTime = System.currentTimeMillis() // remember the start time
@@ -588,8 +592,10 @@ private fun flatMapLatest() = runBlocking {
         }
 }
 /*
-1: First at 162 ms from start
-2: First at 272 ms from start
-3: First at 373 ms from start
-3: Second at 875 ms from start
+1: First at 154 ms from start
+cancelled!!
+2: First at 261 ms from start
+cancelled!!
+3: First at 363 ms from start
+3: Second at 867 ms from start
  */
