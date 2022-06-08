@@ -26,7 +26,8 @@ fun main() {
 //    combine2()
 //    flatMapConcat()
 //    flatMapMerge()
-    flatMapLatest()
+//    flatMapLatest()
+    flowException()
 }
 
 /**
@@ -598,4 +599,33 @@ cancelled!!
 cancelled!!
 3: First at 363 ms from start
 3: Second at 867 ms from start
+ */
+
+
+/**
+ * flow에서 기본적인 예외처리
+ * */
+private fun flowException() = runBlocking {
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            println("Emitting $i")
+            emit(i) // emit next value
+        }
+    }
+
+    try {
+        foo.collect { value ->
+            println(value)
+            check(value == 2) { "Collected $value" } // throw exception
+        }
+    } catch (e: Throwable) {
+        println("Caught $e")
+    }
+}
+/*
+Emitting 1
+1
+Emitting 2
+2
+Caught java.lang.IllegalStateException: Collected 2
  */
