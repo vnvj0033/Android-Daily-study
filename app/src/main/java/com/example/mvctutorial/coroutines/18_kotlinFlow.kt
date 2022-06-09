@@ -27,7 +27,8 @@ fun main() {
 //    flatMapConcat()
 //    flatMapMerge()
 //    flatMapLatest()
-    flowException()
+//    flowException()
+    everythingIsCaught()
 }
 
 /**
@@ -629,3 +630,32 @@ Emitting 2
 2
 Caught java.lang.IllegalStateException: Collected 2
  */
+
+
+/**
+ * flow 예외처리는 collect 외부에서 선언하여도 catch가 가능하다.
+ * */
+private fun everythingIsCaught() = runBlocking {
+    val foo = flow {
+        for (i in 1..3) {
+            println("Emitting $i")
+            emit(i) // emit next value
+        }
+    }.map { value ->
+        check(value <= 1) { "Crashed on $value" }
+        "string $value"
+    }
+
+    try {
+        foo.collect { value -> println(value) }
+    } catch (e: Throwable) {
+        println("Caught $e")
+    }
+}
+/*
+Emitting 1
+string 1
+Emitting 2
+Caught java.lang.IllegalStateException: Crashed on 2
+ */
+
