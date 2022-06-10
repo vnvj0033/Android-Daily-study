@@ -28,7 +28,8 @@ fun main() {
 //    flatMapMerge()
 //    flatMapLatest()
 //    flowException()
-    everythingIsCaught()
+//    everythingIsCaught()
+    exceptionTransparency()
 }
 
 /**
@@ -659,3 +660,26 @@ Emitting 2
 Caught java.lang.IllegalStateException: Crashed on 2
  */
 
+/**
+ * catch라는 operator를 이용하여 exception의 투명성을 보장하고 exception handling을 encapsulation
+ * */
+private fun exceptionTransparency() = runBlocking {
+    val foo: Flow<String> = flow {
+        for (i in 1..3) {
+            println("Emitting $i")
+            emit(i) // emit next value
+        }
+    }.map { value ->
+        check(value <= 1) { "Crashed on $value" }
+        "string $value"
+    }
+
+    foo.catch { e -> emit("Caught $e") } // emit on exception
+        .collect { value -> println(value) }
+}
+/*
+Emitting 1
+string 1
+Emitting 2
+Caught java.lang.IllegalStateException: Crashed on 2
+ */
