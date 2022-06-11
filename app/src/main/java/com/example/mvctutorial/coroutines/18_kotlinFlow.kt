@@ -29,7 +29,8 @@ fun main() {
 //    flatMapLatest()
 //    flowException()
 //    everythingIsCaught()
-    exceptionTransparency()
+//    exceptionTransparency()
+    exceptionTransparency2()
 }
 
 /**
@@ -682,4 +683,38 @@ Emitting 1
 string 1
 Emitting 2
 Caught java.lang.IllegalStateException: Crashed on 2
+ */
+
+
+/**
+ * 예외처리 exception 유형별 처리
+ * */
+private fun exceptionTransparency2() = runBlocking {
+    val foo: Flow<String> = flow {
+        for (i in 1..3) {
+            println("Emitting $i")
+            emit(i) // emit next value
+        }
+    }.map { value ->
+        //    check(value <= 1) { "Crashed on $value" }
+        if (value == 2) {
+            throw java.lang.NullPointerException("Make NPE")
+        }
+        "string $value"
+    }
+
+    foo.catch { e ->
+        when (e) {
+            is IllegalStateException -> emit("Illeagl Ex. Caught $e")
+            is NullPointerException -> emit("NPE Ex. Caught $e")
+            else -> emit("Unknown exception")
+        } // emit on exception
+    }.collect { value -> println(value) }
+}
+
+/*
+Emitting 1
+string 1
+Emitting 2
+NPE Ex. Caught java.lang.NullPointerException: Make NPE
  */
