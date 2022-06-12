@@ -30,7 +30,8 @@ fun main() {
 //    flowException()
 //    everythingIsCaught()
 //    exceptionTransparency()
-    exceptionTransparency2()
+//    exceptionTransparency2()
+    transparentCatch()
 }
 
 /**
@@ -717,4 +718,31 @@ Emitting 1
 string 1
 Emitting 2
 NPE Ex. Caught java.lang.NullPointerException: Make NPE
+ */
+
+
+/**
+ * flow의 예외처리는 downstream에서 catch하여 다음 예제의
+ * collect에서의 예외는 잡을 수 없다.
+ * */
+private fun transparentCatch() = runBlocking {
+
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            println("Emitting $i")
+            emit(i)
+        }
+    }
+
+
+    foo.catch { e -> println("Caught $e") } // does not catch downstream exceptions
+        .collect { value ->
+            check(value <= 1) { "Collected $value" }
+            println(value)
+        }
+}
+/*
+예외발생
+Exception in thread "main" java.lang.IllegalStateException: Collected 2
+at com.example.mvctutorial.coroutines._18_kotlinFlowKt$transparentCatch$1$2.emit(18_kotlinFlow.kt:739)
  */
