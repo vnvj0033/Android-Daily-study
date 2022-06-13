@@ -31,7 +31,8 @@ fun main() {
 //    everythingIsCaught()
 //    exceptionTransparency()
 //    exceptionTransparency2()
-    transparentCatch()
+//    transparentCatch()
+    catchingDeclaratively()
 }
 
 /**
@@ -745,4 +746,28 @@ private fun transparentCatch() = runBlocking {
 예외발생
 Exception in thread "main" java.lang.IllegalStateException: Collected 2
 at com.example.mvctutorial.coroutines._18_kotlinFlowKt$transparentCatch$1$2.emit(18_kotlinFlow.kt:739)
+ */
+
+
+/**
+ * onEach에서 collect시의 예외를 처리할 수 있다.
+ * */
+private fun catchingDeclaratively() = runBlocking {
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            println("Emitting $i")
+            emit(i)
+        }
+    }
+
+    foo.onEach { value ->
+            check(value <= 1) { "Collected $value" }
+            println(value)
+        }
+        .catch { e -> println("Caught $e") }
+        .collect()
+}
+/*
+Emitting 1
+Caught java.lang.IllegalStateException: Collected 2
  */
