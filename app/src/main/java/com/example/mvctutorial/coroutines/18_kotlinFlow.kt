@@ -32,7 +32,8 @@ fun main() {
 //    exceptionTransparency()
 //    exceptionTransparency2()
 //    transparentCatch()
-    catchingDeclaratively()
+//    catchingDeclaratively()
+    imperativeFinallyBlock()
 }
 
 /**
@@ -770,4 +771,24 @@ private fun catchingDeclaratively() = runBlocking {
 /*
 Emitting 1
 Caught java.lang.IllegalStateException: Collected 2
+ */
+
+
+/**
+ * try-catch의 finally block을 사용하면 collect 완료 이후의 작업을 선언해 줄수 있음
+ * */
+private fun imperativeFinallyBlock() = runBlocking {
+    val foo: Flow<Int> = (1..3).asFlow()
+
+    try {
+        foo.collect { value -> println(value) }
+    } finally {
+        println("Done")
+    }
+}
+/*
+1
+2
+3
+Done
  */
