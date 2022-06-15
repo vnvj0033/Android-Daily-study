@@ -33,7 +33,7 @@ fun main() {
 //    exceptionTransparency2()
 //    transparentCatch()
 //    catchingDeclaratively()
-    imperativeFinallyBlock()
+//    imperativeFinallyBlock()
 }
 
 /**
@@ -770,6 +770,8 @@ private fun catchingDeclaratively() = runBlocking {
 }
 /*
 Emitting 1
+1
+Emitting 2
 Caught java.lang.IllegalStateException: Collected 2
  */
 
