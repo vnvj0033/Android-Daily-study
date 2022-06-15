@@ -33,7 +33,8 @@ fun main() {
 //    exceptionTransparency2()
 //    transparentCatch()
 //    catchingDeclaratively()
-    imperativeFinallyBlock()
+//    imperativeFinallyBlock()
+    declarativeHandling()
 }
 
 /**
@@ -770,6 +771,8 @@ private fun catchingDeclaratively() = runBlocking {
 }
 /*
 Emitting 1
+1
+Emitting 2
 Caught java.lang.IllegalStateException: Collected 2
  */
 
@@ -785,6 +788,22 @@ private fun imperativeFinallyBlock() = runBlocking {
     } finally {
         println("Done")
     }
+}
+/*
+1
+2
+3
+Done
+ */
+
+/**
+ * onCompletion을 사용하면 위 같이 collect 완료 이후의 작업을 선언해 줄수 있음
+ * */
+private fun declarativeHandling() = runBlocking {
+    val foo = (1..3).asFlow()
+
+    foo.onCompletion { println("Done") }
+        .collect{ println(it) }
 }
 /*
 1
