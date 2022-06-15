@@ -34,6 +34,7 @@ fun main() {
 //    transparentCatch()
 //    catchingDeclaratively()
 //    imperativeFinallyBlock()
+    declarativeHandling()
 }
 
 /**
@@ -787,6 +788,22 @@ private fun imperativeFinallyBlock() = runBlocking {
     } finally {
         println("Done")
     }
+}
+/*
+1
+2
+3
+Done
+ */
+
+/**
+ * onCompletion을 사용하면 위 같이 collect 완료 이후의 작업을 선언해 줄수 있음
+ * */
+private fun declarativeHandling() = runBlocking {
+    val foo = (1..3).asFlow()
+
+    foo.onCompletion { println("Done") }
+        .collect{ println(it) }
 }
 /*
 1
