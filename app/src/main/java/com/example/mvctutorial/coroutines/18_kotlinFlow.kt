@@ -34,6 +34,7 @@ fun main() {
 //    transparentCatch()
 //    catchingDeclaratively()
 //    imperativeFinallyBlock()
+//    onCompletion()
     declarativeHandling()
 }
 
@@ -799,7 +800,7 @@ Done
 /**
  * onCompletion을 사용하면 위 같이 collect 완료 이후의 작업을 선언해 줄수 있음
  * */
-private fun declarativeHandling() = runBlocking {
+private fun onCompletion() = runBlocking {
     val foo = (1..3).asFlow()
 
     foo.onCompletion { println("Done") }
@@ -810,4 +811,32 @@ private fun declarativeHandling() = runBlocking {
 2
 3
 Done
+ */
+
+/**
+ * onCompletion는 exception을 넘겨 받고, catch에서 exception을 다시 처리.
+ * */
+private fun declarativeHandling() = runBlocking {
+    val foo: Flow<Int> = flow {
+        for (i in 1..3) {
+            emit(1)
+            throw RuntimeException()
+        }
+    }
+
+    foo.onCompletion { cause ->
+        if (cause != null) println("Flow completed exceptionally: $cause")
+    }.catch {
+        println("Caught exception")
+    }.collect { value ->
+        println(value)
+    }
+
+    println("done")
+}
+/*
+1
+Flow completed exceptionally: java.lang.RuntimeException
+Caught exception
+done
  */
