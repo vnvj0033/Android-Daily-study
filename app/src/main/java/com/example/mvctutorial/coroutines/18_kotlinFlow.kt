@@ -35,7 +35,8 @@ fun main() {
 //    catchingDeclaratively()
 //    imperativeFinallyBlock()
 //    onCompletion()
-    declarativeHandling()
+//    declarativeHandling()
+    upstreamExceptionsOnly()
 }
 
 /**
@@ -839,4 +840,23 @@ private fun declarativeHandling() = runBlocking {
 Flow completed exceptionally: java.lang.RuntimeException
 Caught exception
 done
+ */
+
+
+/**
+ * onCompletion는 위에서 내려오는(upstream)exception은 확인할 수 있으나 아래쪽(downstream)의 exception은 확인하지 않음
+ * */
+private fun upstreamExceptionsOnly() = runBlocking {
+    val foo: Flow<Int> = (1..3).asFlow()
+
+    foo.onCompletion { cause -> println("Flow completed with $cause") }
+        .collect { value ->
+            check(value <= 1) { "Collected $value" }
+            println(value)
+        }
+}
+/*
+1
+Flow completed with java.lang.IllegalStateException: Collected 2
+Exception in thread "main" java.lang.IllegalStateException: Collected 2
  */
