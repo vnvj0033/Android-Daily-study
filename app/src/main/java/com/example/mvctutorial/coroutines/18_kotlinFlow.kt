@@ -36,7 +36,8 @@ fun main() {
 //    imperativeFinallyBlock()
 //    onCompletion()
 //    declarativeHandling()
-    upstreamExceptionsOnly()
+//    upstreamExceptionsOnly()
+    launchingFlow()
 }
 
 /**
@@ -859,4 +860,23 @@ private fun upstreamExceptionsOnly() = runBlocking {
 1
 Flow completed with java.lang.IllegalStateException: Collected 2
 Exception in thread "main" java.lang.IllegalStateException: Collected 2
+ */
+
+
+/**
+ * launchIn 을 사용하면 flow collection은 다른 coroutine에서 동작 비동기를 처리 가능
+ * */
+private fun launchingFlow() = runBlocking{
+    val events: Flow<Int> = (1..3).asFlow().onEach { delay(100) }
+
+    events.onEach { event -> println("Event: $event") }
+        .launchIn(this) // <--- Launching the flow in a separate coroutine
+
+    println("Done")
+}
+/*
+Done
+Event: 1
+Event: 2
+Event: 3
  */
