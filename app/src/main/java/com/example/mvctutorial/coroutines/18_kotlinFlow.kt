@@ -864,19 +864,19 @@ Exception in thread "main" java.lang.IllegalStateException: Collected 2
 
 
 /**
- * launchIn 을 사용하면 flow collection은 다른 coroutine에서 동작 비동기를 처리 가능
+ * launching flow는 이벤트를 발생하는 플로우의 이벤트리스너로 사용할 수 있다
  * */
-private fun launchingFlow() = runBlocking{
+private fun launchingFlow() = runBlocking {
+
     val events: Flow<Int> = (1..3).asFlow().onEach { delay(100) }
 
     events.onEach { event -> println("Event: $event") }
-        .launchIn(this) // <--- Launching the flow in a separate coroutine
-
+        .collect() // <--- Collecting the flow waits
     println("Done")
 }
 /*
-Done
 Event: 1
 Event: 2
 Event: 3
+Done
  */
