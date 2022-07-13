@@ -37,7 +37,8 @@ fun main() {
 //    onCompletion()
 //    declarativeHandling()
 //    upstreamExceptionsOnly()
-    launchingFlow()
+//    launchingFlow()
+    launchingFlowLaunchIn()
 }
 
 /**
@@ -871,6 +872,7 @@ private fun launchingFlow() = runBlocking {
     val events: Flow<Int> = (1..3).asFlow().onEach { delay(100) }
 
     events.onEach { event -> println("Event: $event") }
+        .onCompletion { println(Thread.currentThread().name) }
         .collect() // <--- Collecting the flow waits
     println("Done")
 }
@@ -880,3 +882,18 @@ Event: 2
 Event: 3
 Done
  */
+
+
+/**
+ * launchIn은 코루틴 스코프에서 새로운 launch를 생성합니다.
+ * collect 대신 launchIn을 사용하여 분리된 coroutine으로 시작하고 이후 코드는 바로 실행되도록 할 수 있습니다.
+ * */
+private fun launchingFlowLaunchIn() = runBlocking {
+
+    val events: Flow<Int> = (1..3).asFlow().onEach { delay(100) }
+
+    events.onEach { event -> println("Event: $event") }
+        .onCompletion { println(Thread.currentThread().name) }
+        .launchIn(this) // <--- Collecting the flow waits
+    println("Done")
+}
