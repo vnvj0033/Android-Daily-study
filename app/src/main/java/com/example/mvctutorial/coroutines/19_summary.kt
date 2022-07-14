@@ -19,4 +19,14 @@ fun androidDispatcher() = runBlocking {
     CoroutineScope(Dispatchers.Default)
 }
 
+/** launch는 Job을 반환 */
+fun launch() = runBlocking {
+    val job: Job = CoroutineScope(Dispatchers.Main).launch {  }
+}
 
+/** async는 Deferred(갑을 포함)를 반환 */
+fun async() = CoroutineScope(Dispatchers.Main).launch {
+    val deferredInt : Deferred<Int> = async { 1 }
+
+    val value = deferredInt.await() // 1
+}
