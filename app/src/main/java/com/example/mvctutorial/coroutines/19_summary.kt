@@ -25,7 +25,7 @@ fun launch() = runBlocking {
 }
 
 /** async는 Deferred(갑을 포함)를 반환 */
-fun async() = CoroutineScope(Dispatchers.Main).launch {
+fun async() = runBlocking {
     val deferredInt : Deferred<Int> = async { 1 }
 
     val value = deferredInt.await() // 1
