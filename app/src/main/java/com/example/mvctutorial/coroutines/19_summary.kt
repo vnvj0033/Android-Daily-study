@@ -66,3 +66,12 @@ suspend fun suspendFun() {
         job.await()
     }
 }
+
+/** 코루틴은 start = CoroutineStart.LAZY를 사용해 지연 가능  */
+fun lazy() {
+    val job = CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
+        println("시작")
+    }
+
+    job.start()
+}
