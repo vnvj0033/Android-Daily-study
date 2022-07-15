@@ -55,3 +55,14 @@ job2 await 일시 중지 job1, job3 작업 진행
 job3 job1 완료
 job2에 await 값 받아 작업 진행
  */
+
+/** 코루틴 일시정지는 코루틴 스코프 안에서 가능 suspend를 사용하면 코루틴 스코프에서만 사용할 수 있다 */
+suspend fun suspendFun() {
+    val job = CoroutineScope(Dispatchers.IO).async {
+        (1..10000).sortedByDescending { it }
+    }
+
+    CoroutineScope(Dispatchers.Default).launch {
+        job.await()
+    }
+}
