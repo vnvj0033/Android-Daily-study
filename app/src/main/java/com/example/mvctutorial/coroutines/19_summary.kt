@@ -38,14 +38,14 @@ fun progress() {
         (1..10000).sortedByDescending { it }
     }
 
-    val job2 = CoroutineScope(Dispatchers.Main).launch {
+    val job2 = CoroutineScope(Dispatchers.Default).launch {
         println("시작 job2")
         job1.await()
 
         println("완료 job2")
     }
 
-    val job3 = CoroutineScope(Dispatchers.Main).launch {
+    val job3 = CoroutineScope(Dispatchers.Default).launch {
         println("시작 job3")
     }
 }
@@ -64,14 +64,17 @@ suspend fun suspendFun() {
 
     CoroutineScope(Dispatchers.Default).launch {
         job.await()
+        println("끝")
     }
 }
 
 /** 코루틴은 start = CoroutineStart.LAZY를 사용해 지연 가능  */
-fun lazy() = runBlocking {
+fun lazy() {
     val job = CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
         println("시작")
     }
 
-    job.join()
+    job.start()
+
+    Thread.sleep(1000)
 }
