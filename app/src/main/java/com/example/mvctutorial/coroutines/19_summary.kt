@@ -2,8 +2,9 @@ package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
 
-fun main() {
-    lazy()
+fun main() = runBlocking {
+    cancelMessage()
+    delay(1000)
 }
 
 /** 코루틴에서 스레드 풀 만들기 */
@@ -96,5 +97,18 @@ suspend fun cancel() {
 
     job.cancel()
 
+    delay(1000)
+}
+
+
+@OptIn(InternalCoroutinesApi::class)
+suspend fun cancelMessage() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        delay(1000)
+    }
+
+    job.cancel("cancel by me")
+
+    println(job.getCancellationException())
     delay(1000)
 }
