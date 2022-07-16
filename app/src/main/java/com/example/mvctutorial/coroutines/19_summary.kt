@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() {
-
+    lazy()
 }
 
 /** 코루틴에서 스레드 풀 만들기 */
@@ -68,10 +68,10 @@ suspend fun suspendFun() {
 }
 
 /** 코루틴은 start = CoroutineStart.LAZY를 사용해 지연 가능  */
-fun lazy() {
+fun lazy() = runBlocking {
     val job = CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
         println("시작")
     }
 
-    job.start()
+    job.join()
 }
