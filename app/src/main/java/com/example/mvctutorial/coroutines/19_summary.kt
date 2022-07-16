@@ -78,3 +78,12 @@ fun lazy() {
 
     Thread.sleep(1000)
 }
+
+/** join을 사용하여 코루틴 스코프를 기다릴수 있다(현재 코루틴 일시정지) */
+suspend fun join() {
+    val job = CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
+        println("시작")
+    }
+
+    job.join()
+}
