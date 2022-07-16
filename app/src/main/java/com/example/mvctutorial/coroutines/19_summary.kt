@@ -87,3 +87,14 @@ suspend fun join() {
 
     job.join()
 }
+
+/** 코루틴은 Job.cancel을 통해서 취소 명령이 가능하다. */
+suspend fun cancel() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        delay(1000)
+    }
+
+    job.cancel()
+
+    delay(1000)
+}
