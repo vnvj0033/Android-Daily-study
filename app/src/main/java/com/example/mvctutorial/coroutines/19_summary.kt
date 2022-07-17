@@ -175,12 +175,14 @@ suspend fun deferredExceptionHandler() {
         }
     }
 
-    val deferred: Deferred<List<Int>> = CoroutineScope(exceptionHandler).async {
+    val deferred: Deferred<List<Int>> = CoroutineScope(Dispatchers.IO).async {
         throw IllegalArgumentException()
         listOf(1, 2, 3)
     }
 
-    deferred.await()
+    CoroutineScope(exceptionHandler).launch {
+        deferred.await()
+    }
     delay(1000)
 }
 
