@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    deferred()
+    deferredExceptionHandler()
     delay(1000)
 }
 
@@ -165,3 +165,23 @@ suspend fun deferred() {
     val value = deferred.await() // await는 coroutineScope를 일시정지하고 값을 받아온다.
     println(value)
 }
+
+/** deferred에서 예외를 컨트롤 하는 방법 (여기 예제는 main thread에서 예외가 발생) */
+suspend fun deferredExceptionHandler() {
+    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+        when(throwable) {
+            is IllegalArgumentException -> println("call IllegalArgumentException")
+            is InterruptedException -> println("call InterruptedException")
+        }
+    }
+
+    val deferred: Deferred<List<Int>> = CoroutineScope(exceptionHandler).async {
+        throw IllegalArgumentException()
+        listOf(1, 2, 3)
+    }
+
+    deferred.await()
+    delay(1000)
+}
+
+
