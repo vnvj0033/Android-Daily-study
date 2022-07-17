@@ -1,10 +1,9 @@
 package com.example.mvctutorial.coroutines
 
-import android.app.PendingIntent
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    cancelHandling()
+    coroutineExceptionHandle()
     delay(1000)
 }
 
@@ -141,4 +140,18 @@ fun jobStatus() {
     job.isActive        // 실행중인지
     job.isCompleted     // 완료 or 취소 되었는지
     job.isCancelled     // 취소 요청 되었는지
+}
+
+/** CoroutineExceptionHandler는 CoroutineContext로 예외를 컨트롤 할 수 있다. */
+suspend fun coroutineExceptionHandle() {
+    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+        println("context : $coroutineContext")
+        println("throwable : $throwable")
+    }
+
+    val job = CoroutineScope(exceptionHandler).launch {
+        throw IllegalArgumentException()
+    }
+
+    delay(1000)
 }
