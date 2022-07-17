@@ -131,3 +131,14 @@ suspend fun cancelHandling() {
 
     delay(1000)
 }
+
+/** Job의 상태 확인 */
+fun jobStatus() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        delay(1000)
+    }
+
+    job.isActive        // 실행중인지
+    job.isCompleted     // 완료 or 취소 되었는지
+    job.isCancelled     // 취소 요청 되었는지
+}
