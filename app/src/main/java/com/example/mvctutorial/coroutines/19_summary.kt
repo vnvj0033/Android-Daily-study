@@ -166,7 +166,7 @@ suspend fun deferred() {
     println(value)
 }
 
-/** deferred에서 예외를 컨트롤 하는 방법 (여기 예제는 main thread에서 예외가 발생) */
+/** deferred에서 예외를 컨트롤 하는 방법 */
 suspend fun deferredExceptionHandler() {
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         when(throwable) {
