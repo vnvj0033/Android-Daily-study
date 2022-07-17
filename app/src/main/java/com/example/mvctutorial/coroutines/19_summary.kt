@@ -1,5 +1,6 @@
 package com.example.mvctutorial.coroutines
 
+import android.app.PendingIntent
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
@@ -120,7 +121,10 @@ suspend fun cancelHandling() {
     }
 
     job.invokeOnCompletion { throwable ->
-        println(throwable)
+        when(throwable) {
+            is CancellationException -> println("cancel")
+            null -> println("completion")
+        }
     }
 
     job.cancel("call cancel")
