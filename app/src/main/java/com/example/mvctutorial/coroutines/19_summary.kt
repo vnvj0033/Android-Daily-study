@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    cancelMessage()
+    cancelHandling()
     delay(1000)
 }
 
@@ -110,5 +110,20 @@ suspend fun cancelMessage() {
     job.cancel("cancel by me")
 
     println(job.getCancellationException())
+    delay(1000)
+}
+
+/** Job.invokeOnCompletion을 사용하면 thorw를 제어가능 */
+suspend fun cancelHandling() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        delay(1000)
+    }
+
+    job.invokeOnCompletion { throwable ->
+        println(throwable)
+    }
+
+    job.cancel("call cancel")
+
     delay(1000)
 }
