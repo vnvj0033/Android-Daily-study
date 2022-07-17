@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    coroutineExceptionHandle()
+    deferred()
     delay(1000)
 }
 
@@ -154,4 +154,14 @@ suspend fun coroutineExceptionHandle() {
     }
 
     delay(1000)
+}
+
+/** Deferred는 Job 상속하고 마지막 값을 반환한다. */
+suspend fun deferred() {
+    val deferred: Deferred<Int> = CoroutineScope(Dispatchers.IO).async {
+        30
+    }
+
+    val value = deferred.await() // await는 coroutineScope를 일시정지하고 값을 받아온다.
+    println(value)
 }
