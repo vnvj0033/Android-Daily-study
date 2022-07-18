@@ -186,4 +186,11 @@ suspend fun deferredExceptionHandler() {
     delay(1000)
 }
 
+/** withContext 는 코루틴 스코프를 일시정지, 마지막 갑을 반환 (await 대신 사용 가능) */
+suspend fun withContext() {
+    val result = withContext(Dispatchers.IO) {
+        "async result"
+    }
 
+    println(result)
+}
