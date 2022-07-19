@@ -194,3 +194,12 @@ suspend fun withContext() {
 
     println(result)
 }
+
+/** coroutineContext는 + operator로 확장할 수 있다. */
+fun coroutineContext() {
+   val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->  }
+
+    val coroutineContext = Dispatchers.IO + exceptionHandler
+
+    CoroutineScope(coroutineContext).launch {  }
+}
