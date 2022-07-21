@@ -8,32 +8,32 @@ fun main() = runBlocking {
 }
 
 /** 코루틴에서 스레드 풀 만들기 */
-fun createCoroutineThreadPool() = runBlocking {
+private fun createCoroutineThreadPool() = runBlocking {
     val poolDispatcher = newFixedThreadPoolContext(3, "ThreadPool")
     val singleDispatcher = newSingleThreadContext("singleThread")
 }
 
 /** 안드로이드에서 Dispatcher */
-fun androidDispatcher() = runBlocking {
+private fun androidDispatcher() = runBlocking {
     CoroutineScope(Dispatchers.Main)
     CoroutineScope(Dispatchers.IO)
     CoroutineScope(Dispatchers.Default)
 }
 
 /** launch는 Job을 반환 */
-fun launch() = runBlocking {
+private fun launch() = runBlocking {
     val job: Job = CoroutineScope(Dispatchers.Main).launch {  }
 }
 
 /** async는 Deferred(갑을 포함)를 반환 */
-fun async() = runBlocking {
+private fun async() = runBlocking {
     val deferredInt : Deferred<Int> = async { 1 }
 
     val value = deferredInt.await() // 1
 }
 
 /** 하나의 쓰레드에서 코루틴 스코프에 따른 순서 */
-fun progress() {
+private fun progress() {
     val job1 = CoroutineScope(Dispatchers.IO).async {
         println("시작 job1")
         (1..10000).sortedByDescending { it }
@@ -58,7 +58,7 @@ job2에 await 값 받아 작업 진행
  */
 
 /** 코루틴 일시정지는 코루틴 스코프 안에서 가능 suspend를 사용하면 코루틴 스코프에서만 사용할 수 있다 */
-suspend fun suspendFun() {
+private suspend fun suspendFun() {
     val job = CoroutineScope(Dispatchers.IO).async {
         (1..10000).sortedByDescending { it }
     }
@@ -70,7 +70,7 @@ suspend fun suspendFun() {
 }
 
 /** 코루틴은 start = CoroutineStart.LAZY를 사용해 지연 가능  */
-fun lazy() {
+private fun lazy() {
     val job = CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
         println("시작")
     }
@@ -81,7 +81,7 @@ fun lazy() {
 }
 
 /** join을 사용하여 코루틴 스코프를 기다릴수 있다(현재 코루틴 일시정지) */
-suspend fun join() {
+private suspend fun join() {
     val job = CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
         println("시작")
     }
@@ -90,7 +90,7 @@ suspend fun join() {
 }
 
 /** 코루틴은 Job.cancel을 통해서 취소 명령이 가능하다. */
-suspend fun cancel() {
+private suspend fun cancel() {
     val job = CoroutineScope(Dispatchers.IO).launch {
         delay(1000)
     }
@@ -102,7 +102,7 @@ suspend fun cancel() {
 
 
 @OptIn(InternalCoroutinesApi::class)
-suspend fun cancelMessage() {
+private suspend fun cancelMessage() {
     val job = CoroutineScope(Dispatchers.IO).launch {
         delay(1000)
     }
@@ -114,7 +114,7 @@ suspend fun cancelMessage() {
 }
 
 /** Job.invokeOnCompletion을 사용하면 thorw를 제어가능 */
-suspend fun cancelHandling() {
+private suspend fun cancelHandling() {
     val job = CoroutineScope(Dispatchers.IO).launch {
         delay(1000)
     }
@@ -132,7 +132,7 @@ suspend fun cancelHandling() {
 }
 
 /** Job의 상태 확인 */
-fun jobStatus() {
+private fun jobStatus() {
     val job = CoroutineScope(Dispatchers.IO).launch {
         delay(1000)
     }
@@ -143,7 +143,7 @@ fun jobStatus() {
 }
 
 /** CoroutineExceptionHandler는 CoroutineContext로 예외를 컨트롤 할 수 있다. */
-suspend fun coroutineExceptionHandle() {
+private suspend fun coroutineExceptionHandle() {
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         println("context : $coroutineContext")
         println("throwable : $throwable")
@@ -157,7 +157,7 @@ suspend fun coroutineExceptionHandle() {
 }
 
 /** Deferred는 Job 상속하고 마지막 값을 반환한다. */
-suspend fun deferred() {
+private suspend fun deferred() {
     val deferred: Deferred<Int> = CoroutineScope(Dispatchers.IO).async {
         30
     }
@@ -167,7 +167,7 @@ suspend fun deferred() {
 }
 
 /** deferred에서 예외를 컨트롤 하는 방법 */
-suspend fun deferredExceptionHandler() {
+private suspend fun deferredExceptionHandler() {
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         when(throwable) {
             is IllegalArgumentException -> println("call IllegalArgumentException")
@@ -187,7 +187,7 @@ suspend fun deferredExceptionHandler() {
 }
 
 /** withContext 는 코루틴 스코프를 일시정지, 마지막 갑을 반환 (await 대신 사용 가능) */
-suspend fun withContext() {
+private suspend fun withContext() {
     val result = withContext(Dispatchers.IO) {
         "async result"
     }
@@ -196,7 +196,7 @@ suspend fun withContext() {
 }
 
 /** coroutineContext는 + operator로 확장할 수 있다. */
-fun coroutineContext() {
+private fun coroutineContext() {
    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->  }
 
     val coroutineContext = Dispatchers.IO + exceptionHandler
