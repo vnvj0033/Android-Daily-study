@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    deferredExceptionHandler()
+    coroutineContextKey()
     delay(1000)
 }
 
@@ -202,4 +202,17 @@ private fun coroutineContext() {
     val coroutineContext = Dispatchers.IO + exceptionHandler
 
     CoroutineScope(coroutineContext).launch {  }
+}
+
+/** coroutine context 안에서 context key를 참조하여 접근 가능하다. */
+private fun coroutineContextKey() {
+    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->  }
+
+    val coroutineContext = Dispatchers.IO + exceptionHandler
+
+    val exceptionHandlerFromContext = coroutineContext[exceptionHandler.key]
+
+    if (exceptionHandler === exceptionHandlerFromContext) {
+        println("is same!")
+    }
 }
