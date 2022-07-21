@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    coroutineContextMinusKey()
+    supervisorJob()
     delay(1000)
 }
 
@@ -228,4 +228,23 @@ private fun coroutineContextMinusKey() {
     if (minusKey === Dispatchers.IO) {
         println("is same!")
     }
+}
+
+/** supervisorJob을 이용하면 부모의 코루틴을 중단하지 않는다. */
+private suspend fun supervisorJob() {
+    val supervisor = SupervisorJob()
+
+    CoroutineScope(Dispatchers.IO).launch {
+        val firstChildJob = launch(Dispatchers.IO + supervisor) {
+            throw AssertionError("assertion error")
+        }
+
+        val secondChildJob = launch(Dispatchers.Default) {
+            delay(1000)
+            println("second job is life")
+        }
+
+        firstChildJob.join()
+        secondChildJob.join()
+    }.join()
 }
