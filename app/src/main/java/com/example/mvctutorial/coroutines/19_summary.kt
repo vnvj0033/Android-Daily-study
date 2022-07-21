@@ -3,7 +3,7 @@ package com.example.mvctutorial.coroutines
 import kotlinx.coroutines.*
 
 fun main() = runBlocking {
-    coroutineContextKey()
+    coroutineContextMinusKey()
     delay(1000)
 }
 
@@ -213,6 +213,19 @@ private fun coroutineContextKey() {
     val exceptionHandlerFromContext = coroutineContext[exceptionHandler.key]
 
     if (exceptionHandler === exceptionHandlerFromContext) {
+        println("is same!")
+    }
+}
+
+/** coroutine context 에서 minus 를 사용해 key 를 사용해 제거를 사용 가능한다. */
+private fun coroutineContextMinusKey() {
+    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->  }
+
+    val coroutineContext = Dispatchers.IO + exceptionHandler
+
+    val minusKey = coroutineContext.minusKey(exceptionHandler.key)
+
+    if (minusKey === Dispatchers.IO) {
         println("is same!")
     }
 }
