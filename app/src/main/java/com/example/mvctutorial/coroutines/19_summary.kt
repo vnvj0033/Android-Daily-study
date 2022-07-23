@@ -1,9 +1,10 @@
 package com.example.mvctutorial.coroutines
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    supervisorJob()
+
     delay(1000)
 }
 
@@ -252,3 +253,13 @@ private suspend fun supervisorJob() {
 firstChildJob은 중단 되지만
 secondChildJob은 완료됨
  */
+
+
+/** Flow의 생성자는 flow빌더로 만들 수 있다. */
+private fun producer() {
+    flow {
+        (0..10).forEach {
+            emit(it)
+        }
+    }
+}
