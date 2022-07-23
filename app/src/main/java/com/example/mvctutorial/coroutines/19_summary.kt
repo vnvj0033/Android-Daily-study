@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-
+    flowIntermediary()
     delay(1000)
 }
 
@@ -261,5 +261,21 @@ private fun producer() {
         (0..10).forEach {
             emit(it)
         }
+    }
+}
+
+
+/** Flow의 중간 연상자 map, filter, onEach 등등 */
+private fun flowIntermediary() {
+    flow {
+        (0..10).forEach {
+            emit(it)
+        }
+    }.map { // 데이터 변경
+        it + it
+    }.filter { // 데이터 필터링
+        true
+    }.onEach { // 모든 데이터에 연산
+        println("$it each")
     }
 }
