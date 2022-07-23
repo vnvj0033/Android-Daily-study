@@ -248,3 +248,7 @@ private suspend fun supervisorJob() {
         secondChildJob.join()
     }.join()
 }
+/*
+firstChildJob은 중단 되지만
+secondChildJob은 완료됨
+ */
