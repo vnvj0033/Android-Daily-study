@@ -279,3 +279,14 @@ private fun flowIntermediary() {
         println("$it each")
     }
 }
+
+/** Flow는 collect를 사용해 소모처리를 한다. */
+private suspend fun flowConsumer() {
+    flow {
+        (0..10).forEach {
+            emit(it)
+        }
+    }.collect {
+        println(it)
+    }
+}
