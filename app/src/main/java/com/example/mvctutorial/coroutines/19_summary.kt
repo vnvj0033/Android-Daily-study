@@ -4,8 +4,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    flowIntermediary()
-    delay(1000)
+    state_in()
+    delay(10000)
 }
 
 /** 코루틴에서 스레드 풀 만들기 */
@@ -287,6 +287,26 @@ private suspend fun flowConsumer() {
             emit(it)
         }
     }.collect {
+        println(it)
+    }
+}
+
+/** Flow에 stateIn을 사용해 flow의 속성을 지정할 수 있음 */
+private suspend fun state_in() {
+    val stringFlow = flow {
+        (0..1000).forEach {
+            emit("Integer $it")
+            delay(1000)
+        }
+    }
+
+    val statusFlow = stringFlow.stateIn(
+        initialValue = "integer 0",
+        started = SharingStarted.WhileSubscribed(5000),
+        scope = CoroutineScope(Dispatchers.IO)
+    )
+
+    statusFlow.collect {
         println(it)
     }
 }
