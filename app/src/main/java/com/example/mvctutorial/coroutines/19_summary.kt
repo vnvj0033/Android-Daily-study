@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    collect_last()
+    collect_latest()
     delay(10000)
 }
 
@@ -311,16 +311,17 @@ private suspend fun state_in() {
     }
 }
 
-/** collectLatest를 사용하면 최신 collect하는 값을 가져온다. */
-private suspend fun collect_last() {
+/** collectLatest를 사용하면 소비측 지연이 있을시 소비를 취소하고 다음 생성자를 전달한다. */
+private suspend fun collect_latest() {
     val stringFlow = flow {
         (0..10).forEach {
             emit("Integer $it")
-            delay(1000)
+            delay(300)
         }
     }
 
     stringFlow.collectLatest {
         println(it)
+        delay(1000)
     }
 }
