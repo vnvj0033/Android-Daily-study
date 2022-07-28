@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    collect_latest()
+    buffer()
     delay(10000)
 }
 
@@ -313,15 +313,33 @@ private suspend fun state_in() {
 
 /** collectLatest를 사용하면 소비측 지연이 있을시 소비를 취소하고 다음 생성자를 전달한다. */
 private suspend fun collect_latest() {
-    val stringFlow = flow {
+    val flow = flow {
         (0..10).forEach {
             emit("Integer $it")
             delay(300)
         }
     }
 
-    stringFlow.collectLatest {
+    flow.collectLatest {
         println(it)
         delay(1000)
     }
+}
+
+/** flow 생성자 소비자는 서로 작업을 기다리는 비효율성이 있어 buffer로 생성자 저장  */
+private suspend fun buffer() {
+    val flow = flow {
+        (0..10).forEach {
+            emit(it)
+            delay(300)
+        }
+    }
+
+    flow.onEach {
+        println("emit $it")
+    }.buffer().collect {
+        delay(1000)
+        println("collect $it")
+    }
+
 }
