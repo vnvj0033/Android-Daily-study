@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    buffer()
+    conflate()
     delay(10000)
 }
 
@@ -342,4 +342,21 @@ private suspend fun buffer() {
         println("collect $it")
     }
 
+}
+
+/** conflate는 flow의 가장 최근의 emit 값을 가져온다. */
+private suspend fun conflate() {
+    val flow = flow {
+        (0..10).forEach {
+            emit(it)
+            delay(3000)
+        }
+    }
+
+    flow.onEach {
+        println("emit $it")
+    }.conflate().collect {
+        println("collect $it")
+        delay(5000)
+    }
 }
