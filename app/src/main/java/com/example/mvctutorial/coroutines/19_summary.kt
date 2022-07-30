@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    conflate()
+    collectWithFlatMapConcat()
     delay(10000)
 }
 
@@ -358,5 +358,23 @@ private suspend fun conflate() {
     }.conflate().collect {
         println("collect $it")
         delay(5000)
+    }
+}
+
+/** flatMapConcat을 사용하면 새로운 flow 객체를 생성여변환한다. */
+private suspend fun collectWithFlatMapConcat() {
+    val flow = flow {
+        emit(1)
+        emit(5)
+    }
+
+    flow.flatMapConcat { initValue ->
+        flow {
+            emit(initValue + 1)
+            emit(initValue + 2)
+            emit(initValue + 3)
+        }
+    }.collect {
+        println("collect $it")
     }
 }
