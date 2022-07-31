@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    collectWithFlatMapConcat()
+    flatMapConcatLimit()
     delay(10000)
 }
 
@@ -371,6 +371,26 @@ private suspend fun collectWithFlatMapConcat() {
     flow.flatMapConcat { initValue ->
         flow {
             emit(initValue + 1)
+            emit(initValue + 2)
+            emit(initValue + 3)
+        }
+    }.collect {
+        println("collect $it")
+    }
+}
+
+
+/** flatMapConcat의 생산이 오래 걸리면 소비가 지연됨 */
+private suspend fun flatMapConcatLimit() {
+    val flow = flow {
+        emit(1)
+        emit(5)
+    }
+
+    flow.flatMapConcat { initValue ->
+        flow {
+            emit(initValue + 1)
+            delay(1000)
             emit(initValue + 2)
             emit(initValue + 3)
         }
