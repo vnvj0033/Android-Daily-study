@@ -1,1 +1,1 @@
-# daily study-android
+# study-android
