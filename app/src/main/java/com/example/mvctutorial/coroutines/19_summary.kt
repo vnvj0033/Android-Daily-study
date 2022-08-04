@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    flatMapConcatLimit()
+    flatMapLatest()
     delay(10000)
 }
 
@@ -396,5 +396,27 @@ private suspend fun flatMapConcatLimit() {
         }
     }.collect {
         println("collect $it")
+    }
+}
+
+/**
+ * flatMapLatest도 새로운 flow 객체를 생성여변환한다.
+ * 다만 지연시 지연 취소되어 이전 데이터만 flow로 반환하여 넘긴다.
+ * */
+private suspend fun flatMapLatest() {
+    val flow = flow {
+        emit(1)
+        emit(5)
+    }
+
+    flow.flatMapLatest { value->
+        flow {
+            emit(value + 1)
+            delay(1000)
+            emit(value + 2)
+            emit(value + 3)
+        }
+    }.collect {
+        println(it)
     }
 }
