@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun main() = runBlocking {
-    flatMapLatest()
+    flatMapMerge()
     delay(10000)
 }
 
@@ -410,6 +410,27 @@ private suspend fun flatMapLatest() {
     }
 
     flow.flatMapLatest { value->
+        flow {
+            emit(value + 1)
+            delay(1000)
+            emit(value + 2)
+            emit(value + 3)
+        }
+    }.collect {
+        println(it)
+    }
+}
+
+/**
+ * flatMapMerge는 병렬 collect를 지원한다. 순서를 보장하지 않으나 처리가 빠른
+ * */
+private suspend fun flatMapMerge() {
+    val flow = flow {
+        emit(1)
+        emit(5)
+    }
+
+    flow.flatMapMerge { value->
         flow {
             emit(value + 1)
             delay(1000)
