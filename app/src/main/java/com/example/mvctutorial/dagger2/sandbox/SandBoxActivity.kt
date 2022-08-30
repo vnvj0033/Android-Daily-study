@@ -2,6 +2,9 @@ package com.example.mvctutorial.dagger2.sandbox
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mvctutorial.App
 import javax.inject.Inject
@@ -14,7 +17,11 @@ class SandBoxActivity: AppCompatActivity() {
         (application as App).appComponent.inject(this)
         super.onCreate(savedInstanceState, persistentState)
 
-        model
+        val view = TextView(this).apply {
+            layoutParams = ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            text = model.data
+        }
 
+        setContentView(view)
     }
 }
