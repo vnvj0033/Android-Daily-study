@@ -1,4 +1,4 @@
-package com.example.mvctutorial.dagger2.sandbox
+package com.example.mvctutorial.dagger2.sandbox.di
 
 import dagger.Component
 

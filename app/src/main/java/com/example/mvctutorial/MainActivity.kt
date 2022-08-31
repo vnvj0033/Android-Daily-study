@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.mvctutorial.compose.ComposeActivity
-import com.example.mvctutorial.dagger2.sandbox.SandBoxActivity
-import com.example.mvctutorial.dagger2.sandbox.SandBoxModel
+import com.example.mvctutorial.dagger2.sandbox.di.SandBoxActivity
 import com.example.mvctutorial.databinding.ActivityMainBinding
 import com.example.mvctutorial.homecontent.BannerActivity
 import com.example.mvctutorial.navigate.NavigateActivity

@@ -1,4 +1,4 @@
-package com.example.mvctutorial.dagger2.sandbox
+package com.example.mvctutorial.dagger2.sandbox.di
 
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -13,9 +13,9 @@ class SandBoxActivity: AppCompatActivity() {
 
     @Inject lateinit var model: SandBoxModel
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         (application as App).appComponent.inject(this)
-        super.onCreate(savedInstanceState, persistentState)
+        super.onCreate(savedInstanceState)
 
         val view = TextView(this).apply {
             layoutParams = ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
