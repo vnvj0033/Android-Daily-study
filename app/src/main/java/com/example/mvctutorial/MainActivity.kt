@@ -1,5 +1,6 @@
 package com.example.mvctutorial
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,39 +19,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.activity = this
     }
 
-    val bannerClick = View.OnClickListener{
-        val intent = Intent(this, BannerActivity::class.java)
-        startActivity(intent)
-    }
+    val bannerClick = startActivity(BannerActivity::class.java)
+    val uitestClick = startActivity(UiTestActivity::class.java)
+    val navClick = startActivity(NavigateActivity::class.java)
+    val netClick = startActivity(RetrofitActivity::class.java)
+    val composeClick = startActivity(ComposeActivity::class.java)
+    val sandBoxClick = startActivity(SandBoxActivity::class.java)
 
-    val uitestClick = View.OnClickListener {
-        val intent = Intent(this, UiTestActivity::class.java)
-        startActivity(intent)
-    }
-
-    val navClick = View.OnClickListener {
-        val intent = Intent(this, NavigateActivity::class.java)
-        startActivity(intent)
-    }
-
-    val netClick = View.OnClickListener {
-        val intent = Intent(this, RetrofitActivity::class.java)
-        startActivity(intent)
-    }
-
-    val composeClick = View.OnClickListener {
-        val intent = Intent(this, ComposeActivity::class.java)
-        startActivity(intent)
-    }
-
-    val sandBoxClick = View.OnClickListener {
-        val intent = Intent(this, SandBoxActivity::class.java)
+    private fun startActivity(cls: Class<out Activity>) = View.OnClickListener {
+        val intent = Intent(this, cls)
         startActivity(intent)
     }
 }
