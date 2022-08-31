@@ -3,7 +3,7 @@ package com.example.mvctutorial.dagger2.sandbox.di
 import dagger.Component
 
 @Component
-interface AppComponent {
+interface ApplicationGraph {
 
-    fun inject(activity: SandBoxActivity)
+    fun repository(): UserRepository
 }
