@@ -12,4 +12,8 @@ class PersonModule {
     @Provides
     @Named("Teacher")
     fun providesTeacherName() = "TeacherB"
+
+    @Provides
+    @Named("Address")
+    fun providesStudentAddress() = "Address"
 }

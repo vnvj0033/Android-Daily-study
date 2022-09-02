@@ -6,6 +6,7 @@ fun main() {
     val student = Student()
     personComponent.injectStudent(student)
     println(student.name)
+    println(student.address)
 
     val teacher = Teacher()
     personComponent.injectTeacher(teacher)

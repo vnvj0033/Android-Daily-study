@@ -7,4 +7,9 @@ class Student {
     @Inject
     @Named("Student")
     lateinit var name: String
+
+
+    @Inject
+    @Named("Address")
+    lateinit var address: String
 }
