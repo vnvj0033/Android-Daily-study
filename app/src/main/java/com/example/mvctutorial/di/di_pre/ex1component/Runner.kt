@@ -4,4 +4,5 @@ fun main() {
     val person = Student()
     DaggerStringComponent.create().injectString(person)
     println (person.name)
+    println (person.address)
 }

@@ -6,5 +6,7 @@ import dagger.Provides
 @Module
 class StringModule {
     @Provides
-    fun providesString() = "StringA"
+    fun providesName() = "name"
+    @Provides
+    fun providesAddress() = 1
 }
