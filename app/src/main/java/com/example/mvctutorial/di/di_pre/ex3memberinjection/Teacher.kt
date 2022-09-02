@@ -6,6 +6,6 @@ class Teacher {
     lateinit var name: String
     @Inject
     fun setTeacherName(name: String) {
-        this.name = name
+        this.name = "$name method inject"
     }
 }
