@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.mvctutorial.compose.ComposeActivity
-import com.example.mvctutorial.di.sandbox.di.LoginActivity
 import com.example.mvctutorial.databinding.ActivityMainBinding
 import com.example.mvctutorial.homecontent.BannerActivity
 import com.example.mvctutorial.navigate.NavigateActivity
@@ -31,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     val navClick = startActivity(NavigateActivity::class.java)
     val netClick = startActivity(RetrofitActivity::class.java)
     val composeClick = startActivity(ComposeActivity::class.java)
-    val sandBoxClick = startActivity(LoginActivity::class.java)
 
     private fun startActivity(cls: Class<out Activity>) = View.OnClickListener {
         val intent = Intent(this, cls)
