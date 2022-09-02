@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.mvctutorial.compose.ComposeActivity
-import com.example.mvctutorial.dagger2.sandbox.di.LoginActivity
+import com.example.mvctutorial.di.sandbox.di.LoginActivity
 import com.example.mvctutorial.databinding.ActivityMainBinding
 import com.example.mvctutorial.homecontent.BannerActivity
 import com.example.mvctutorial.navigate.NavigateActivity

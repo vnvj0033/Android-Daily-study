@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVCTutorial">
-        <activity android:name=".dagger2.sandbox.di.LoginActivity"
+        <activity android:name="com.example.mvctutorial.di.sandbox.di.LoginActivity"
             android:exported="false"/>
         <activity
             android:name=".compose.ComposeActivity"
@@ -22,7 +22,7 @@
             android:name=".network.RetrofitActivity"
             android:exported="false" />
         <activity
-            android:name=".di_pre.DIActivity"
+            android:name="com.example.mvctutorial.di.di_pre.DIActivity"
             android:exported="true" />
         <activity
             android:name=".navigate.NavigateActivity"
