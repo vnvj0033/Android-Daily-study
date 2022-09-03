@@ -4,5 +4,5 @@ import dagger.Component
 
 @Component(modules = [PersonModule::class])
 interface SchoolComponent {
-    fun getStudent(): Student
+    fun getStudent(): Person
 }

@@ -11,6 +11,6 @@ abstract class PersonModule {
 
     companion object {
         @Provides
-        fun providesString() = "StudentA"
+        fun providesName(): String = "123123123"
     }
 }
