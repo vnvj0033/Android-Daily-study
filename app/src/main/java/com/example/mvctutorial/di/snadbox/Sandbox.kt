@@ -6,9 +6,11 @@ import dagger.Provides
 import javax.inject.Inject
 
 fun main() {
-    val coffeeMaker = CoffeeMaker()
-// inject(), Member-injection Method 실행 (coffeeMaker객체의 멤버변수/필드에 의존성 주입)
-    DaggerCoffeeComponent.create().inject(coffeeMaker)
+    // inject(), Member-injection Method 실행 (coffeeMaker객체의 멤버변수/필드에 의존성 주입)
+    val component = DaggerCoffeeComponent.create()
+
+    val coffeeMaker = component.inject()
+
     coffeeMaker.brew()
 }
 
@@ -18,7 +20,7 @@ fun main() {
 interface CoffeeComponent {
 
     // member-injection method 유형
-    fun inject(coffeeMaker: CoffeeMaker)
+    fun inject(): CoffeeMaker
 }
 
 @Module
@@ -40,11 +42,15 @@ class CoffeeMakerModule {
         }
 
     }
+
+    @Provides
+    fun provideCoffeeMaker(heater: Heater, pump: Pump) = CoffeeMaker(heater, pump)
 }
 
-class CoffeeMaker {
-    @Inject lateinit var heater: Heater
-    @Inject lateinit var pump: Pump
+class CoffeeMaker(
+    private var heater: Heater,
+    private var pump: Pump
+) {
     fun brew() {
         heater.on()
         pump.pump()
